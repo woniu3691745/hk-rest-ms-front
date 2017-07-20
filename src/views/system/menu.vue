@@ -241,9 +241,13 @@
         },
         resetTemp() {
           this.temp = {
-            token: undefined,
-            password: undefined,
-            introduction: undefined
+            name: undefined,
+            path: undefined,
+            component: undefined,
+            role: undefined,
+            parent: undefined,
+            redirect: undefined,
+            icon: undefined
           };
         },
         handleDownload() {
