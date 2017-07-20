@@ -208,9 +208,8 @@
           this.temp.creater = store.getters.name;
           this.temp.modify = store.getters.name;
           addSystemUser(this.temp).then(response => {
-            this.getList();
-            // this.temp.userId = response.data;
-            // this.list.unshift(this.temp);
+            this.temp = response.data[0];
+            this.list.unshift(this.temp);
             this.dialogFormVisible = false;
             this.$notify({
               title: '成功',
@@ -254,8 +253,8 @@
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['用户名', '密码', '创建人', '创建时间', '描述'];
-            const filterVal = ['token', 'password', 'creator', 'createTime', 'introduction'];
+            const tHeader = ['用户名', '密码', '用户角色','联系方式', '创建人', '创建时间', '地址'];
+            const filterVal = ['userName', 'userPassword', 'userRole', 'userPhone', 'creator', 'createDateTime', 'userAddress'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');
           })

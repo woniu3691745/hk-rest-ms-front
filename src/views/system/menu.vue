@@ -209,8 +209,8 @@
           this.temp.creater = store.getters.name;
           this.temp.modify = store.getters.name;
           addSystemMenu(this.temp).then(response => {
-            // this.temp.id = response.data;
-            // this.list.unshift(this.temp);
+            this.temp = response.data[0];
+            this.list.unshift(this.temp);
             this.dialogFormVisible = false;
             this.$notify({
               title: '成功',
