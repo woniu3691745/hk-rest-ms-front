@@ -106,7 +106,7 @@
 </template>
 
 <script>
-    import { getUserList, addSystemUser, deleteSystemUser ,updateSystemUser } from 'api/login';
+    import { getUserList, addSystemUser, deleteSystemUser,updateSystemUser } from 'api/login';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -130,19 +130,19 @@
             userPhone: undefined,
             userSex: undefined,
             userAddress: undefined,
-            createDateTime:undefined,
+            createDateTime: undefined,
             creater: undefined
           },
           dialogFormVisible: false,
           dialogStatus: '',
-          sexOptions:[
+          sexOptions: [
             {
-              name:"男",
-              value:1
+              name: '男',
+              value: 1
             },
             {
-              name:"女",
-              value:0
+              name: '女',
+              value: 0
             }
           ],
           textMap: {
@@ -246,14 +246,14 @@
             userPhone: undefined,
             userSex: undefined,
             userAddress: undefined,
-            createDateTime:undefined,
+            createDateTime: undefined,
             creater: undefined
           };
         },
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['用户名', '密码', '用户角色','联系方式', '创建人', '创建时间', '地址'];
+            const tHeader = ['用户名', '密码', '用户角色', '联系方式', '创建人', '创建时间', '地址'];
             const filterVal = ['userName', 'userPassword', 'userRole', 'userPhone', 'creator', 'createDateTime', 'userAddress'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');

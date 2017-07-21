@@ -35,7 +35,7 @@
     "vue-router": "2.5.3",
     "vuedraggable": "2.13.1",
     "vuex": "2.3.1",
-    "xlsx": "0.8.1"
+    "xlsx": "^0.10.8"
   },
   "devDependencies": {
     "autoprefixer": "7.1.1",
@@ -43,7 +43,7 @@
     "babel-eslint": "7.2.3",
     "babel-loader": "7.0.0",
     "babel-plugin-transform-runtime": "6.23.0",
-     "babel-preset-env": "1.5.2",
+    "babel-preset-env": "1.5.2",
     "babel-preset-stage-2": "6.24.1",
     "babel-register": "6.24.1",
     "chalk": "1.1.3",

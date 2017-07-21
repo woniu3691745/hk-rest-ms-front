@@ -194,7 +194,7 @@
           this.dialogFormVisible = true;
         },
         handleDelete(row) {
-          deleteSystemMenu(row.id).then(response => {
+          deleteSystemMenu(row.id).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -203,7 +203,7 @@
             });
             const index = this.list.indexOf(row);
             this.list.splice(index, 1);
-            })
+          })
         },
         create() {
           this.temp.creater = store.getters.name;
@@ -222,7 +222,7 @@
         },
         update() {
           this.temp.modify = store.getters.name;
-          updateSystemMenu(this.temp).then(response => {
+          updateSystemMenu(this.temp).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v);
@@ -253,8 +253,8 @@
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）','图片（一级）'];
-            const filterVal = ['name', 'path', 'component', 'role',  'parent', 'redirect','icon'];
+            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）', '图片（一级）'];
+            const filterVal = ['name', 'path', 'component', 'role', 'parent', 'redirect', 'icon'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');
           })

@@ -6,7 +6,7 @@ import router from './router';
 import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
-//import 'assets/custom-theme/index.css'; // 换肤版本element-ui css https://github.com/PanJiaChen/custom-element-theme
+// import 'assets/custom-theme/index.css'; // 换肤版本element-ui css https://github.com/PanJiaChen/custom-element-theme
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css';// Progress 进度条 样式
 import 'normalize.css/normalize.css';// normalize.css 样式格式化
@@ -52,11 +52,11 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetInfo').then(res => { // 拉取user_info
-          const roles = res.data[0].userRole.split(",");
+          const roles = res.data[0].userRole.split(',');
           store.dispatch('GetMenuList', { roles }).then(res => { // 获取菜单信息
-            //var menuList = res.data.items;
-            var menuList = res.data;
-            store.dispatch('GenerateRoutes', { roles ,menuList}).then(() => { // 生成可访问的路由表
+            // var menuList = res.data.items;
+            const menuList = res.data;
+            store.dispatch('GenerateRoutes', { roles, menuList }).then(() => { // 生成可访问的路由表
               router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
               next(to.path); // hack方法 确保addRoutes已完成
             })
