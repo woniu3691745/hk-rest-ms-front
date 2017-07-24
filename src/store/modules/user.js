@@ -195,8 +195,12 @@ function initMenu(menuList){
      var menu = menuList[i],
          component = menu.component;
      if(component){
-       component = _import(component);
-       menu.component = component;
+       try {
+         component = _import(component);
+         menu.component = component;
+       } catch (error) {
+         menu.component = null;
+       }
        if(menu.children){
          initMenu(menu.children);
        }
