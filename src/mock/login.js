@@ -37,7 +37,6 @@ export default {
     return userMap[email.split('@')[0]];
   },
   loginByName: config => {
-    debugger;
     const { name,password } = JSON.parse(config.body);
     var user = userMap[name];
     if(user.password === password){
@@ -59,7 +58,6 @@ export default {
     };
   },
   getInfo: config => {
-    debugger;
     const { token } = param2Obj(config.url);
     if (userMap[token]) {
       return userMap[token];

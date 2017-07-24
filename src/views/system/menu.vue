@@ -78,21 +78,21 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="菜单名称">
-          <el-input v-model="temp.name"></el-input>
+      <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="菜单名称" prop="name">
+          <el-input v-model="temp.name" name = "name"></el-input>
         </el-form-item>
 
-        <el-form-item label="页面路径">
-          <el-input v-model="temp.path"></el-input>
+        <el-form-item label="页面路径" prop="path">
+          <el-input v-model="temp.path" name = "path"></el-input>
         </el-form-item>
 
-        <el-form-item label="组件路径">
-          <el-input v-model="temp.component"></el-input>
+        <el-form-item label="组件路径" prop="component">
+          <el-input v-model="temp.component" name = "component"></el-input>
         </el-form-item>
 
-        <el-form-item label="菜单权限">
-          <el-input v-model="temp.role"></el-input>
+        <el-form-item label="菜单权限" prop="role">
+          <el-input v-model="temp.role" name = "role"></el-input>
         </el-form-item>
 
         <el-form-item label="父菜单">
@@ -143,6 +143,20 @@
             parent: undefined,
             redirect: undefined,
             icon: undefined
+          },
+          menuRules: {
+            name: [
+                { required: true, trigger: 'blur'}
+            ],
+            path: [
+                { required: true, trigger: 'blur'}
+            ],
+            component: [
+                { required: true, trigger: 'blur'}
+            ],
+            role: [
+                { required: true, trigger: 'blur'}
+            ]
           },
           dialogFormVisible: false,
           dialogStatus: '',
@@ -206,19 +220,26 @@
           })
         },
         create() {
-          this.temp.creater = store.getters.name;
-          this.temp.modify = store.getters.name;
-          addSystemMenu(this.temp).then(response => {
-            this.temp = response.data[0];
-            this.list.unshift(this.temp);
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            });
-          })
+          this.$refs.menuForm.validate(valid => {
+            if (valid) {
+              this.temp.creater = store.getters.name;
+              this.temp.modify = store.getters.name;
+              addSystemMenu(this.temp).then(response => {
+                this.temp = response.data[0];
+                this.list.unshift(this.temp);
+                this.dialogFormVisible = false;
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         },
         update() {
           this.temp.modify = store.getters.name;

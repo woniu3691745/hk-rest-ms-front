@@ -89,7 +89,6 @@ const user = {
       const name = userInfo.name.trim();
       return new Promise((resolve, reject) => {
         loginByName(name, userInfo.password).then(response => {
-          debugger;
           const data = response.data[0];
           if(data[0]){
             var userData = data[0];
@@ -108,9 +107,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        debugger;
         getInfo(state.token).then(response => {
-          debugger;
           const userData = response.data[0];
           commit('SET_TOKEN', userData.userId);
           commit('SET_NAME', userData.userName);
@@ -200,6 +197,9 @@ function initMenu(menuList){
          menu.component = component;
        } catch (error) {
          menu.component = null;
+       }
+       if(!menu.parent && menu.path.indexOf("/") != 0){
+         menu.path = "/" + menu.path;
        }
        if(menu.children){
          initMenu(menu.children);

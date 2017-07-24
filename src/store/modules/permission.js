@@ -48,7 +48,6 @@ const permission = {
         const { roles, menuList} = data
         let accessedRouters,
             asyncRouterMap = menuList;
-        debugger;
         if (roles.indexOf('admin') >= 0) {
           accessedRouters = asyncRouterMap
         } else {
