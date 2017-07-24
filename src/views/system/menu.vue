@@ -242,23 +242,30 @@
           });
         },
         update() {
-          this.temp.modify = store.getters.name;
-          updateSystemMenu(this.temp).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v);
-                this.list.splice(index, 1, this.temp);
-                break;
-              }
+          this.$refs.menuForm.validate(valid => {
+            if (valid) {
+              this.temp.modify = store.getters.name;
+              updateSystemMenu(this.temp).then(() => {
+                for (const v of this.list) {
+                  if (v.id === this.temp.id) {
+                    const index = this.list.indexOf(v);
+                    this.list.splice(index, 1, this.temp);
+                    break;
+                  }
+                }
+                this.dialogFormVisible = false;
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
             }
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            });
-          })
+          });
         },
         resetTemp() {
           this.temp = {

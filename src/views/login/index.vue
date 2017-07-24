@@ -64,7 +64,7 @@
                 { required: true, trigger: 'blur', validator: validateEmail }
             ],
             password: [
-                { required: true, trigger: 'blur', validator: validatePass }
+                { required: true, trigger: 'blur' }
             ]
           },
           loading: false,

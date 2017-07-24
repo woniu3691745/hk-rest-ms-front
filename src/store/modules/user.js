@@ -95,8 +95,9 @@ const user = {
             Cookies.set('Admin-Token', userData.userId);
             commit('SET_TOKEN', userData.userId);
             commit('SET_NAME', userData.userName);
+            resolve();
           }
-          resolve();
+          reject("login error");
         }).catch(error => {
           reject(error);
         });

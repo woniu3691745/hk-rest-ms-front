@@ -66,17 +66,17 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="用户名">
-          <el-input v-model="temp.userName"></el-input>
+      <el-form class="small-space" ref="userForm" :rules="userRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="temp.userName" name = "userName"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码">
-          <el-input v-model="temp.userPassword"></el-input>
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户角色">
-          <el-input v-model="temp.userRole"></el-input>
+        <el-form-item label="用户角色" prop="userRole">
+          <el-input v-model="temp.userRole" name = "userRole"></el-input>
         </el-form-item>
 
         <el-form-item label="联系方式">
@@ -132,6 +132,17 @@
             userAddress: undefined,
             createDateTime: undefined,
             creater: undefined
+          },
+          userRules: {
+            userName: [
+                { required: true, trigger: 'blur'}
+            ],
+            userPassword: [
+                { required: true, trigger: 'blur'}
+            ],
+            userRole: [
+                { required: true, trigger: 'blur'}
+            ]
           },
           dialogFormVisible: false,
           dialogStatus: '',
@@ -205,38 +216,52 @@
           })
         },
         create() {
-          this.temp.creater = store.getters.name;
-          this.temp.modify = store.getters.name;
-          addSystemUser(this.temp).then(response => {
-            this.temp = response.data[0];
-            this.list.unshift(this.temp);
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            });
-          })
+          this.$refs.userForm.validate(valid => {
+            if (valid) {
+              this.temp.creater = store.getters.name;
+              this.temp.modify = store.getters.name;
+              addSystemUser(this.temp).then(response => {
+                this.temp = response.data[0];
+                this.list.unshift(this.temp);
+                this.dialogFormVisible = false;
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
         },
         update() {
-          this.temp.modify = store.getters.name;
-          updateSystemUser(this.temp).then(response => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v);
-                this.list.splice(index, 1, this.temp);
-                break;
-              }
+          this.$refs.userForm.validate(valid => {
+            if (valid) {
+              this.temp.modify = store.getters.name;
+              updateSystemUser(this.temp).then(response => {
+                for (const v of this.list) {
+                  if (v.id === this.temp.id) {
+                    const index = this.list.indexOf(v);
+                    this.list.splice(index, 1, this.temp);
+                    break;
+                  }
+                }
+                this.dialogFormVisible = false;
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
             }
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            });
-          })
+          });
         },
         resetTemp() {
           this.temp = {
