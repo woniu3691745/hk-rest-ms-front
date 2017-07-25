@@ -1,7 +1,28 @@
-import fetch from 'utils/fetch';
+//import fetch from 'utils/fetch';
+import {service} from 'utils/fetchUtil';
 
+var module = "sysMenu";
 
 export function fetchSystemMenuList(query) {
+  return service(module, "all", query, "get");
+}
+
+export function fetchSystemMenusByPage(query) {
+  return service(module, "query", query);
+}
+
+export function addSystemMenu(query) {
+  return service(module, "add", query);
+}
+
+export function deleteSystemMenu(query) {
+  return service(module, "delete", query);
+}
+
+export function updateSystemMenu(query) {
+  return service(module, "update", query);
+}
+/*export function fetchSystemMenuList(query) {
   var page, limit,
       // url = '/api/sysMenu/getAll';      
       url = 'http://localhost:8088/api/sysMenu/getAll';
@@ -61,4 +82,4 @@ export function updateSystemMenu(query) {
     method: 'put',
     data: query
   });
-}
+}*/

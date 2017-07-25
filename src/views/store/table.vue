@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="菜单名称" v-model="listQuery.name">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户名" v-model="listQuery.token">
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
@@ -11,51 +11,39 @@
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="83px" align="center" label="菜单ID">
+      <el-table-column width="170px" align="center" label="用户名">
         <template scope="scope">
-          <span>{{scope.row.id}}</span>
-        </template>
-      </el-table-column>
-      
-      <el-table-column width="110px" align="center" label="菜单名称">
-        <template scope="scope">
-          <span>{{scope.row.name}}</span>
+          <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="页面路径">
+      <el-table-column width="170px" align="center" label="密码">
         <template scope="scope">
-          <span>{{scope.row.path}}</span>
+          <span>{{scope.row.userPassword}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="组件路径">
+      <el-table-column width="180px" align="center" label="用户角色">
         <template scope="scope">
-          <span>{{scope.row.component}}</span>
+          <span>{{scope.row.userRole}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="菜单权限">
+      <el-table-column width="170px" align="center" label="联系方式">
         <template scope="scope">
-          <span>{{scope.row.role}}</span>
+          <span>{{scope.row.userPhone}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="90px" align="center" label="父菜单">
+      <el-table-column width="110px" align="center" label="创建人">
         <template scope="scope">
-          <span>{{scope.row.parent}}</span>
+          <span>{{scope.row.creater}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="160px" align="center" label="是否是系统菜单">
+      <el-table-column width="180px" align="center" label="创建时间">
         <template scope="scope">
-          <span>{{scope.row.type}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="130px" align="center" label="图片（一级）">
-        <template scope="scope">
-          <span>{{scope.row.icon}}</span>
+          <span>{{scope.row.createDateTime | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
         </template>
       </el-table-column>
 
@@ -78,40 +66,33 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="菜单名称" prop="name">
-          <el-input v-model="temp.name" name = "name"></el-input>
+      <el-form class="small-space" ref="userForm" :rules="userRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="temp.userName" name = "userName"></el-input>
         </el-form-item>
 
-        <el-form-item label="页面路径" prop="path">
-          <el-input v-model="temp.path" name = "path"></el-input>
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="组件路径" prop="component">
-          <el-input v-model="temp.component" name = "component"></el-input>
+        <el-form-item label="用户角色" prop="userRole">
+          <el-input v-model="temp.userRole" name = "userRole"></el-input>
         </el-form-item>
 
-        <el-form-item label="菜单权限" prop="role">
-          <el-input v-model="temp.role" name = "role"></el-input>
+        <el-form-item label="联系方式">
+          <el-input v-model="temp.userPhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="父菜单">
-          <el-input v-model="temp.parent"></el-input>
-        </el-form-item>
-
-        <el-form-item label="是否是系统菜单">
-          <el-select class="filter-item" v-model="temp.type" placeholder="请选择">
-            <el-option v-for="item in menuTypeOptions" :key="item" :label="item.name" :value="item.value">
+        <el-form-item label="性别">
+          <el-select class="filter-item" v-model="temp.userSex" placeholder="请选择">
+            <el-option v-for="item in  sexOptions" :key="item" :label="item.name" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="默认路径（一级）">
-          <el-input v-model="temp.redirect"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图片（一级）">
-          <el-input v-model="temp.icon"></el-input>
+        <el-form-item label="地址">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userAddress">
+          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -125,7 +106,7 @@
 </template>
 
 <script>
-    import { fetchSystemMenusByPage, addSystemMenu, deleteSystemMenu, updateSystemMenu } from 'api/menu';
+    import { getUserList, addSystemUser, deleteSystemUser,updateSystemUser } from 'api/login';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -140,44 +121,41 @@
           listQuery: {
             page: 1,
             limit: 20,
-            name: undefined
+            userName: undefined
           },
           temp: {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            type: 1,
-            icon: undefined
+            userName: undefined,
+            userPassword: undefined,
+            userRole: undefined,
+            userPhone: undefined,
+            userSex: undefined,
+            userAddress: undefined,
+            createDateTime: undefined,
+            creater: undefined
           },
-          menuRules: {
-            name: [
+          userRules: {
+            userName: [
                 { required: true, trigger: 'blur'}
             ],
-            path: [
+            userPassword: [
                 { required: true, trigger: 'blur'}
             ],
-            component: [
-                { required: true, trigger: 'blur'}
-            ],
-            role: [
+            userRole: [
                 { required: true, trigger: 'blur'}
             ]
           },
-          menuTypeOptions: [
+          dialogFormVisible: false,
+          dialogStatus: '',
+          sexOptions: [
             {
-              name: '是',
+              name: '男',
               value: 1
             },
             {
-              name: '否',
+              name: '女',
               value: 0
             }
           ],
-          dialogFormVisible: false,
-          dialogStatus: '',
           textMap: {
             update: '编辑',
             create: '创建'
@@ -191,7 +169,7 @@
       methods: {
         getList() {
           this.listLoading = true;
-          fetchSystemMenusByPage(this.listQuery).then(response => {
+          getUserList(this.listQuery).then(response => {
             this.list = response.data[0];
             this.total = response.data[1];
             this.listLoading = false;
@@ -226,7 +204,7 @@
           this.dialogFormVisible = true;
         },
         handleDelete(row) {
-          deleteSystemMenu(row.id).then(() => {
+          deleteSystemUser(row.userId).then(response => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -238,11 +216,11 @@
           })
         },
         create() {
-          this.$refs.menuForm.validate(valid => {
+          this.$refs.userForm.validate(valid => {
             if (valid) {
               this.temp.creater = store.getters.name;
               this.temp.modify = store.getters.name;
-              addSystemMenu(this.temp).then(response => {
+              addSystemUser(this.temp).then(response => {
                 this.temp = response.data[0];
                 this.list.unshift(this.temp);
                 this.dialogFormVisible = false;
@@ -260,10 +238,10 @@
           });
         },
         update() {
-          this.$refs.menuForm.validate(valid => {
+          this.$refs.userForm.validate(valid => {
             if (valid) {
               this.temp.modify = store.getters.name;
-              updateSystemMenu(this.temp).then(() => {
+              updateSystemUser(this.temp).then(response => {
                 for (const v of this.list) {
                   if (v.id === this.temp.id) {
                     const index = this.list.indexOf(v);
@@ -287,21 +265,21 @@
         },
         resetTemp() {
           this.temp = {
-            name: undefined,
-            path: undefined,
-            type:1,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            userName: undefined,
+            userPassword: undefined,
+            userRole: undefined,
+            userPhone: undefined,
+            userSex: undefined,
+            userAddress: undefined,
+            createDateTime: undefined,
+            creater: undefined
           };
         },
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）', '图片（一级）'];
-            const filterVal = ['name', 'path', 'component', 'role', 'parent', 'redirect', 'icon'];
+            const tHeader = ['用户名', '密码', '用户角色', '联系方式', '创建人', '创建时间', '地址'];
+            const filterVal = ['userName', 'userPassword', 'userRole', 'userPhone', 'creator', 'createDateTime', 'userAddress'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');
           })

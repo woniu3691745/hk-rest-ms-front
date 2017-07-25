@@ -1,4 +1,5 @@
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 import { Message } from 'element-ui';
 import store from '../store';
 // import router from '../router';

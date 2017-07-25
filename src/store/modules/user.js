@@ -89,7 +89,8 @@ const user = {
       const name = userInfo.name.trim();
       return new Promise((resolve, reject) => {
         loginByName(name, userInfo.password).then(response => {
-          const data = response.data[0];
+          debugger;
+          /*const data = response.data[0];
           if(data[0]){
             var userData = data[0];
             Cookies.set('Admin-Token', userData.userId);
@@ -97,7 +98,10 @@ const user = {
             commit('SET_NAME', userData.userName);
             resolve();
           }
-          reject("login error");
+          reject("login error");*/
+          Cookies.set('Admin-Token', 11111111111);
+          commit('SET_TOKEN', 111111111111);
+          resolve();
         }).catch(error => {
           reject(error);
         });
@@ -108,7 +112,8 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
+        getInfo().then(response => {
+          debugger;
           const userData = response.data[0];
           commit('SET_TOKEN', userData.userId);
           commit('SET_NAME', userData.userName);
@@ -202,6 +207,7 @@ function initMenu(menuList){
        if(!menu.parent && menu.path.indexOf("/") != 0){
          menu.path = "/" + menu.path;
        }
+       menu.hidden = (menu.type === "0");
        if(menu.children){
          initMenu(menu.children);
        }

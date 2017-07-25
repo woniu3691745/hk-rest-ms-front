@@ -11,57 +11,52 @@
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="83px" align="center" label="菜单ID">
+      <el-table-column width="263px" align="center" label="店名">
         <template scope="scope">
-          <span>{{scope.row.id}}</span>
-        </template>
-      </el-table-column>
-      
-      <el-table-column width="110px" align="center" label="菜单名称">
-        <template scope="scope">
-          <span>{{scope.row.name}}</span>
+          <span>{{scope.row.storeName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="页面路径">
+      <el-table-column width="140px" align="center" label="店主">
         <template scope="scope">
-          <span>{{scope.row.path}}</span>
+          <span>{{scope.row.storeAdmin}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="组件路径">
+      <el-table-column width="80px" align="center" label="餐位费">
         <template scope="scope">
-          <span>{{scope.row.component}}</span>
+          <span>{{scope.row.seatCost}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="菜单权限">
+      <el-table-column width="90px" align="center" label="服务费">
         <template scope="scope">
-          <span>{{scope.row.role}}</span>
+          <span>{{scope.row.serviceCost}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="90px" align="center" label="父菜单">
+      <el-table-column width="130px" align="center" label="电话">
         <template scope="scope">
-          <span>{{scope.row.parent}}</span>
+          <span>{{scope.row.storePhone}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="160px" align="center" label="是否是系统菜单">
+      <el-table-column width="170px" align="center" label="营业时间">
         <template scope="scope">
-          <span>{{scope.row.type}}</span>
+          <span>{{scope.row.storeBusinessDay || "全年"}}</span><br>
+          <span>上午：{{scope.row.storeBusinessAmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessAmEndHours | parseTime('{h}:{i}')}}</span><br>
+          <span>下午：{{scope.row.storeBusinessPmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessPmEndHours | parseTime('{h}:{i}')}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" label="图片（一级）">
-        <template scope="scope">
-          <span>{{scope.row.icon}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="270">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
+          </el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">
+            <router-link to="/store/tableInfo">餐桌</router-link>
+          </el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">二维码
           </el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
@@ -79,39 +74,34 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="菜单名称" prop="name">
-          <el-input v-model="temp.name" name = "name"></el-input>
+        <el-form-item label="店名" prop="storeName">
+          <el-input v-model="temp.storeName" name = "storeName"></el-input>
         </el-form-item>
 
-        <el-form-item label="页面路径" prop="path">
+        <el-form-item label="店主" prop="path">
           <el-input v-model="temp.path" name = "path"></el-input>
         </el-form-item>
 
-        <el-form-item label="组件路径" prop="component">
-          <el-input v-model="temp.component" name = "component"></el-input>
+        <el-form-item label="餐位费" prop="seatCost">
+          <el-input v-model="temp.seatCost" name = "seatCost"></el-input>
         </el-form-item>
 
-        <el-form-item label="菜单权限" prop="role">
-          <el-input v-model="temp.role" name = "role"></el-input>
+        <el-form-item label="服务费" prop="serviceCost">
+          <el-input v-model="temp.serviceCost" name = "serviceCost"></el-input>
         </el-form-item>
 
-        <el-form-item label="父菜单">
-          <el-input v-model="temp.parent"></el-input>
+        <el-form-item label="电话">
+          <el-input v-model="temp.storePhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="是否是系统菜单">
-          <el-select class="filter-item" v-model="temp.type" placeholder="请选择">
-            <el-option v-for="item in menuTypeOptions" :key="item" :label="item.name" :value="item.value">
-            </el-option>
-          </el-select>
+        <el-form-item label="通知">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.storeNotice">
+          </el-input>
         </el-form-item>
 
-        <el-form-item label="默认路径（一级）">
-          <el-input v-model="temp.redirect"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图片（一级）">
-          <el-input v-model="temp.icon"></el-input>
+        <el-form-item label="描述">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userDescription">
+          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -125,7 +115,7 @@
 </template>
 
 <script>
-    import { fetchSystemMenusByPage, addSystemMenu, deleteSystemMenu, updateSystemMenu } from 'api/menu';
+    import { getStoresByPage, addStore, deleteStore, updateStore } from 'api/store';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -140,7 +130,7 @@
           listQuery: {
             page: 1,
             limit: 20,
-            name: undefined
+            userId: store.getters.uid
           },
           temp: {
             name: undefined,
@@ -149,7 +139,6 @@
             role: undefined,
             parent: undefined,
             redirect: undefined,
-            type: 1,
             icon: undefined
           },
           menuRules: {
@@ -166,16 +155,6 @@
                 { required: true, trigger: 'blur'}
             ]
           },
-          menuTypeOptions: [
-            {
-              name: '是',
-              value: 1
-            },
-            {
-              name: '否',
-              value: 0
-            }
-          ],
           dialogFormVisible: false,
           dialogStatus: '',
           textMap: {
@@ -191,9 +170,10 @@
       methods: {
         getList() {
           this.listLoading = true;
-          fetchSystemMenusByPage(this.listQuery).then(response => {
+          getStoresByPage(this.listQuery).then(response => {
             this.list = response.data[0];
             this.total = response.data[1];
+            debugger;
             this.listLoading = false;
           })
         },
@@ -289,7 +269,6 @@
           this.temp = {
             name: undefined,
             path: undefined,
-            type:1,
             component: undefined,
             role: undefined,
             parent: undefined,

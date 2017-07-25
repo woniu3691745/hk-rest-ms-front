@@ -1,5 +1,9 @@
 import fetch from 'utils/fetch';
 
+import {service} from 'utils/fetchUtil';
+
+var module = "sysUser";
+
 export function loginByEmail(email, password) {
   const data = {
     email,
@@ -12,7 +16,49 @@ export function loginByEmail(email, password) {
   });
 }
 
+export function logout() {
+  return fetch({
+    url: '/login/logout',
+    method: 'post'
+  });
+}
+
+
+
 export function loginByName(userName, userPassword) {
+  debugger;
+  var query = {
+    userName: userName,
+    userPassword: userPassword
+  };
+  return service("", "login", query, "post");
+}
+
+export function getUserList(query) {
+  return service(module, "query", query);
+}
+
+export function getInfo(userId) {
+  /*var query = {
+    userId : userId
+  }*/
+  return service(module, "info");
+}
+
+export function addSystemUser(query) {
+  return service(module, "add", query);
+}
+
+export function deleteSystemUser(query) {
+  return service(module, "delete", query);
+}
+
+export function updateSystemUser(query) {
+  return service(module, "update", query);
+}
+
+
+/*export function loginByName(userName, userPassword) {
   const data = {
     userName,
     userPassword
@@ -26,12 +72,6 @@ export function loginByName(userName, userPassword) {
   });
 }
 
-export function logout() {
-  return fetch({
-    url: '/login/logout',
-    method: 'post'
-  });
-}
 
 export function getUserList(query) {
   var page, limit,
@@ -96,5 +136,5 @@ export function updateSystemUser(query) {
     method: 'put',
     data: query
   });
-}
+}*/
 
