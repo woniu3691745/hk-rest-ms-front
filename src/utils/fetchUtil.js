@@ -21,19 +21,16 @@ if (process.env.NODE_ENV === 'development') {
  * @param {object} data 请求需要传递的数据
  * @param {string} method 请求的方法（get,post,put,delete），不传该值取acrionMap默认值
  */
- export function service(module, action, data, method) {
-    var url = servicePro + "/api/" + (module? module +"/" : "");
-    if(acrionMap[action]){
-        url += acrionMap[action][0];
-        if(action === "query"){
-            var page = +data.page - 1;
-            var limit = data.limit;
-            url += "/" + page + "/" + limit;
-        }else if(action === "delete"){
-                url += "/" + data;
-        }
-    }else{
-        url += action
+export function service(module, action, data, method) {
+  let url = '/api/' + (module ? module + '/' : '');
+  if (acrionMap[action]) {
+    url += acrionMap[action][0];
+    if (action === 'query') {
+      const page = +data.page - 1;
+      const limit = data.limit;
+      url += '/' + page + '/' + limit;
+    } else if (action === 'delete') {
+      url += '/' + data;
     }
   } else {
     url += action
