@@ -32,7 +32,7 @@ module.exports = {
         staticPath: '/static/',
         proxyTable: {
             '/api/': {
-                target: 'http://10.7.13.152:8088',
+                target: 'http://localhost:8088',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '/api'
