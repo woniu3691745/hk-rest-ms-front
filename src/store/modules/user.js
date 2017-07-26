@@ -89,8 +89,8 @@ const user = {
       const name = userInfo.name.trim();
       return new Promise((resolve, reject) => {
         loginByName(name, userInfo.password).then(response => {
-          debugger;
-          /*const data = response.data[0];
+          debugger
+          /* const data = response.data[0];
           if(data[0]){
             var userData = data[0];
             Cookies.set('Admin-Token', userData.userId);
@@ -99,8 +99,12 @@ const user = {
             resolve();
           }
           reject("login error");*/
-          Cookies.set('Admin-Token', 11111111111);
-          commit('SET_TOKEN', 111111111111);
+          // Cookies.set('Admin-Token', '11-32');
+          // commit('SET_TOKEN', '11-32');
+
+          Cookies.set('Admin-Token', response.data.cookie);
+          commit('SET_TOKEN', response.data.cookie);
+
           resolve();
         }).catch(error => {
           reject(error);
@@ -113,11 +117,10 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          debugger;
           const userData = response.data[0];
           commit('SET_TOKEN', userData.userId);
           commit('SET_NAME', userData.userName);
-          commit('SET_ROLES', userData.userRole.split(","));
+          commit('SET_ROLES', userData.userRole.split(','));
           commit('SET_UID', userData.userId);
           resolve(response);
         }).catch(error => {
@@ -181,7 +184,7 @@ const user = {
           const data = response.data;
           initMenu(data);
           // initMenu(data.items);
-          //asyncRouterMap = data.items;
+          // asyncRouterMap = data.items;
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -192,27 +195,27 @@ const user = {
 };
 
 
-function initMenu(menuList){
-  var length = menuList.length;
-   for(var i = 0; i < length; i++){
-     var menu = menuList[i],
-         component = menu.component;
-     if(component){
-       try {
-         component = _import(component);
-         menu.component = component;
-       } catch (error) {
-         menu.component = null;
-       }
-       if(!menu.parent && menu.path.indexOf("/") != 0){
-         menu.path = "/" + menu.path;
-       }
-       menu.hidden = (menu.type === "0");
-       if(menu.children){
-         initMenu(menu.children);
-       }
-     }
-   }
+function initMenu(menuList) {
+  const length = menuList.length;
+  for (let i = 0; i < length; i++) {
+    let menu = menuList[i],
+      component = menu.component;
+    if (component) {
+      try {
+        component = _import(component);
+        menu.component = component;
+      } catch (error) {
+        menu.component = null;
+      }
+      if (!menu.parent && menu.path.indexOf('/') != 0) {
+        menu.path = '/' + menu.path;
+      }
+      menu.hidden = menu.type === '0';
+      if (menu.children) {
+        initMenu(menu.children);
+      }
+    }
+  }
 }
 
 export default user;
