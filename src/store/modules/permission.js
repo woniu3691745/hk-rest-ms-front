@@ -48,11 +48,12 @@ const permission = {
         const { roles, menuList} = data
         let accessedRouters,
             asyncRouterMap = menuList;
-        if (roles.indexOf('admin') >= 0) {
+        /*if (roles.indexOf('admin') >= 0) {
           accessedRouters = asyncRouterMap
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
+        }*/
+        accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         commit('SET_ROUTERS', accessedRouters);
         resolve();
       })

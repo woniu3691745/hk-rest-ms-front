@@ -85,12 +85,11 @@ const user = {
     },
 
     // 用户名登录
-    LoginByName({ commit }, userInfo) {
+    /*LoginByName({ commit }, userInfo) {
       const name = userInfo.name.trim();
       return new Promise((resolve, reject) => {
         loginByName(name, userInfo.password).then(response => {
-          debugger;
-          /*const data = response.data[0];
+          const data = response.data[0];
           if(data[0]){
             var userData = data[0];
             Cookies.set('Admin-Token', userData.userId);
@@ -98,9 +97,20 @@ const user = {
             commit('SET_NAME', userData.userName);
             resolve();
           }
-          reject("login error");*/
-          Cookies.set('Admin-Token', 11111111111);
-          commit('SET_TOKEN', 111111111111);
+          reject("login error");
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },*/
+
+    LoginByName({ commit }, userInfo) {
+      const name = userInfo.name.trim();
+      return new Promise((resolve, reject) => {
+        loginByName(name, userInfo.password).then(response => {
+          var token = new Date().getTime();
+          Cookies.set('Admin-Token', token);
+          commit('SET_TOKEN', token);
           resolve();
         }).catch(error => {
           reject(error);
@@ -113,7 +123,6 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          debugger;
           const userData = response.data[0];
           commit('SET_TOKEN', userData.userId);
           commit('SET_NAME', userData.userName);

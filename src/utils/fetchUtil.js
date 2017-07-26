@@ -23,7 +23,6 @@ if(process.env.NODE_ENV === "development"){
  * @param {string} method 请求的方法（get,post,put,delete），不传该值取acrionMap默认值
  */
  export function service(module, action, data, method) {
-    debugger;
     var url = servicePro + "/api/" + (module? module +"/" : "");
     if(acrionMap[action]){
         url += acrionMap[action][0];

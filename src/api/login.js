@@ -25,13 +25,21 @@ export function logout() {
 
 
 
+/*export function loginByName(userName, userPassword) {
+  var query = {
+    userName: userName,
+    userPassword: userPassword,
+    page: 1,
+    limit : 1
+  };
+  return service(module, "query", query);
+}*/
 export function loginByName(userName, userPassword) {
-  debugger;
   var query = {
     userName: userName,
     userPassword: userPassword
   };
-  return service("", "login", query, "post");
+  return service("","login", query, "post");
 }
 
 export function getUserList(query) {
@@ -39,10 +47,10 @@ export function getUserList(query) {
 }
 
 export function getInfo(userId) {
-  /*var query = {
+  var query = {
     userId : userId
-  }*/
-  return service(module, "info");
+  }
+  return service(module, "info", query);
 }
 
 export function addSystemUser(query) {

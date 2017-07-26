@@ -287,3 +287,8 @@ code {
 .el-tag {
   background-color: #20a0ff;
 }
+.router-link-exact-active{
+  .el-tag {
+    background-color: #337ab7;
+  }
+}

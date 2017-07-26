@@ -173,7 +173,6 @@
           getStoresByPage(this.listQuery).then(response => {
             this.list = response.data[0];
             this.total = response.data[1];
-            debugger;
             this.listLoading = false;
           })
         },
