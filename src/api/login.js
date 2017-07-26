@@ -26,6 +26,15 @@ export function logout() {
 
 
 
+/* export function loginByName(userName, userPassword) {
+  var query = {
+    userName: userName,
+    userPassword: userPassword,
+    page: 1,
+    limit : 1
+  };
+  return service(module, "query", query);
+}*/
 export function loginByName(userName, userPassword) {
   const query = {
     userName,
