@@ -20,13 +20,24 @@
       mounted() {
         const element = document.getElementById(this.id);
         const vm = this;
+        debugger;
         this.dropzone = new Dropzone(element, {
           clickable: this.clickable,
           thumbnailWidth: this.thumbnailWidth,
           thumbnailHeight: this.thumbnailHeight,
           maxFiles: this.maxFiles,
           maxFilesize: this.maxFilesize,
-          dictRemoveFile: 'Remove',
+          dictDefaultMessage: "请拖拽上传的图片到这里",
+          dictFallbackMessage: "你的浏览器不支持拖拽上传图片.",
+          dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+          dictFileTooBig: "图片太大了 ({{filesize}}MiB). 最大限制: {{maxFilesize}}MiB.",
+          dictInvalidFileType: "你不能上传这种类型的图片",
+          dictResponseError: "Server responded with {{statusCode}} code.",
+          dictCancelUpload: "取消上传",
+          dictCancelUploadConfirmation: "你确定取消上传?",
+          dictRemoveFile: "删除",
+          dictRemoveFileConfirmation: null,
+          dictMaxFilesExceeded: "你不能再上传更多图片了.",
           addRemoveLinks: this.showRemoveLink,
           acceptedFiles: this.acceptedFiles,
           autoProcessQueue: this.autoProcessQueue,

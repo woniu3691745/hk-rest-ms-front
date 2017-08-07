@@ -280,7 +280,7 @@ code {
     background-color: #337ab7;
   }
   .el-submenu .el-menu {
-    background-color: #20a0ff;
+    background-color: #20b6f9;
   }
 }
 
@@ -291,4 +291,12 @@ code {
   .el-tag {
     background-color: #337ab7;
   }
+}
+
+.el-select.filter-item {
+  width:100%;
+}
+
+.el-date-editor.el-input {
+    width: 100%;
 }

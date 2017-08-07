@@ -29,7 +29,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="组件路径">
+      <el-table-column width="180px" align="center" label="组件路径">
         <template scope="scope">
           <span>{{scope.row.component}}</span>
         </template>
@@ -47,13 +47,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="160px" align="center" label="是否是系统菜单">
+      <el-table-column width="120px" align="center" label="系统菜单">
         <template scope="scope">
-          <span>{{scope.row.type}}</span>
+          <span>{{menuTypeOptionsObj[scope.row.type]}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" label="图片（一级）">
+      <el-table-column width="110px" align="center" label="图片（一级）">
         <template scope="scope">
           <span>{{scope.row.icon}}</span>
         </template>
@@ -176,6 +176,10 @@
               value: 0
             }
           ],
+          menuTypeOptionsObj: {
+            "1":"是",
+            "0":"否"
+          },
           dialogFormVisible: false,
           dialogStatus: '',
           textMap: {

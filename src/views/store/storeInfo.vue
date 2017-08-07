@@ -1,0 +1,192 @@
+<template>
+  <div class="app-container calendar-list-container">
+    <h2>{{textMap[formStatus]}}门店</h2>
+    <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label-width="150px" label="店名" prop="storeName">
+            <el-input v-model="temp.storeName" name ="storeName"></el-input>
+          </el-form-item>
+          <el-form-item label-width="150px" label="店主" prop="storeAdmin">
+            <el-input v-model="temp.storeAdmin" name ="storeAdmin"></el-input>
+          </el-form-item>
+          <el-form-item label="餐位费" prop="seatCost">
+            <el-input v-model="temp.seatCost" name ="seatCost"></el-input>
+          </el-form-item>
+          <el-form-item label="服务费" prop="serviceCost">
+            <el-input v-model="temp.serviceCost" name ="serviceCost"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item>
+            <PanThumb :image='image'></PanThumb><br>
+            <el-button type="primary" icon="upload" style="position: absolute;margin-left: 10px;" @click="imagecropperShow=true">修改门店logo
+            </el-button>
+
+            <ImageCropper :width="300" :height="300" url="https://httpbin.org/post" @close='close' @crop-upload-success="cropSuccess"
+              :key="imagecropperKey" v-show="imagecropperShow" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="上午营业时间">
+            <el-time-select v-model="temp.storeBusinessAmStartHours" 
+            :picker-options="{start: '00:00',step: '00:30',end: '12:00'}"></el-time-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="到">
+            <el-time-select v-model="temp.storeBusinessAmEndHours" 
+            :picker-options="{start: '00:00',step: '00:30',end: '12:00'}"></el-time-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="下午营业时间">
+            <el-time-select v-model="temp.storeBusinessPmStartHours" 
+            :picker-options="{start: '12:00',step: '00:30',end: '24:00'}"></el-time-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="到">
+            <el-time-select v-model="temp.storeBusinessPmEndHours" 
+            :picker-options="{start: '12:00',step: '00:30',end: '24:00'}"></el-time-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="营业日期">
+            <el-input v-model="temp.storeBusinessDay"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="电话">
+            <el-input v-model="temp.storePhone"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-form-item label="通知">
+        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.storeNotice">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item label="描述">
+        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userDescription">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item label="门店图片">
+        <Dropzone  v-on:dropzone-removedFile="dropzoneR" v-on:dropzone-success="dropzoneS" id="myVueDropzone"
+            url="https://httpbin.org/post" :defaultImg = 'defaultImg'></Dropzone>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button v-if="formStatus=='create'" type="primary" @click="create">确 定</el-button>
+      <el-button v-else type="primary" @click="update">确 定</el-button>
+    </div>
+  </div>
+</template>
+
+<script>
+    import { getStoresByPage, addStore, deleteStore, updateStore } from 'api/store';
+    import { parseTime } from 'utils';
+
+    import ImageCropper from 'components/ImageCropper';
+    import PanThumb from 'components/PanThumb';
+    import Dropzone from 'components/Dropzone';
+
+    import store from 'store';
+
+    export default {
+      components: { ImageCropper, PanThumb, Dropzone},
+      name: 'table_demo',
+      data() {
+        return {
+          imagecropperShow: false,
+          imagecropperKey: 0,
+          image: '',
+          defaultImg:'',
+          temp: {
+            name: undefined,
+            path: undefined,
+            component: undefined,
+            role: undefined,
+            parent: undefined,
+            redirect: undefined,
+            icon: undefined
+          },
+          menuRules: {
+            name: [
+                { required: true, trigger: 'blur'}
+            ],
+            path: [
+                { required: true, trigger: 'blur'}
+            ],
+            component: [
+                { required: true, trigger: 'blur'}
+            ],
+            role: [
+                { required: true, trigger: 'blur'}
+            ]
+          },
+          formStatus: 'create',
+          textMap: {
+            update: '编辑',
+            create: '创建'
+          }
+        }
+      },
+      created() {
+        this.image = "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191";
+        this.defaultImg = "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191";
+      },
+      methods: {
+        resetTemp() {
+          this.temp = {
+            name: undefined,
+            path: undefined,
+            component: undefined,
+            role: undefined,
+            parent: undefined,
+            redirect: undefined,
+            icon: undefined
+          };
+        },
+        cropSuccess(resData) {
+          this.imagecropperShow = false;
+          this.imagecropperKey = this.imagecropperKey + 1;
+          this.image = resData.files.avatar;
+        },
+        close() {
+          this.imagecropperShow = false;
+        },
+        dropzoneS(file) {
+          console.log(file)
+          this.$message({ message: '上传成功', type: 'success' });
+        },
+        dropzoneR(file) {
+          console.log(file)
+          this.$message({ message: '删除成功', type: 'success' });
+        }
+      }
+    }
+</script>
+
+<style scoped>
+.avatar{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.dialog-footer {
+  text-align: center;
+}
+</style>

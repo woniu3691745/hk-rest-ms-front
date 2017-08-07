@@ -46,10 +46,12 @@ const whiteList = ['/login', '/authredirect', '/reset', '/sendpwd'];// 不重定
 
 router.beforeEach((to, from, next) => {
   NProgress.start(); // 开启Progress
+  debugger;
   if (store.getters.token) { // 判断是否有token
     if (to.path === '/login') {
       next({ path: '/' });
     } else {
+      debugger;
       if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetInfo').then(res => { // 拉取user_info
           const roles = res.data[0].userRole.split(',');

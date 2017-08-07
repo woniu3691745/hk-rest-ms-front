@@ -108,10 +108,12 @@ const user = {
       const name = userInfo.name.trim();
       return new Promise((resolve, reject) => {
         loginByName(name, userInfo.password).then(response => {
-          let token = new Date().getTime();
-          Cookies.set('Admin-Token', response.data.cookie);
-          commit('SET_TOKEN', response.data.cookie);
-          resolve();
+          if(response.data &&　response.data.code === 200){
+            Cookies.set('Admin-Token', response.data.cookie);
+            commit('SET_TOKEN', response.data.cookie);
+            resolve();
+          }
+          reject(response.data.msg);
         }).catch(error => {
           reject(error);
         });
