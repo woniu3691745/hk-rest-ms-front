@@ -84,7 +84,7 @@
 
       <el-form-item label="门店图片">
         <Dropzone  v-on:dropzone-removedFile="dropzoneR" v-on:dropzone-success="dropzoneS" id="myVueDropzone"
-            url="https://httpbin.org/post" :defaultImg = 'defaultImg'></Dropzone>
+            url="api/sysUser/headDown//img.jpg" :defaultImg = 'defaultImg'></Dropzone>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -103,6 +103,8 @@
     import Dropzone from 'components/Dropzone';
 
     import store from 'store';
+
+    import { getStoreImages } from 'api/store';
 
     export default {
       components: { ImageCropper, PanThumb, Dropzone},
@@ -146,7 +148,11 @@
       },
       created() {
         this.image = "/api/sysUser/headDown/img.jpg";
-        this.defaultImg = ["/api/sysUser/headDowns"];
+        //this.defaultImg = ["/api/sysUser/headDowns"];
+        getStoreImages().then(response => {
+            debugger;
+            this.defaultImg = response.data;
+          })
       },
       methods: {
         create(){

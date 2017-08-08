@@ -22,3 +22,7 @@ export function deleteStore(query) {
 export function updateStore(query) {
   return service(module, "update", query);
 }
+
+export function getStoreImages(query) {
+  return service("sysUser", "headDowns", query, "get");
+}
