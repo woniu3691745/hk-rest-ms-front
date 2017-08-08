@@ -259,7 +259,6 @@
           this.temp = {
             userName: undefined,
             userPassword: undefined,
-            userRole: undefined,
             userPhone: undefined,
             userSex: undefined,
             userAddress: undefined,

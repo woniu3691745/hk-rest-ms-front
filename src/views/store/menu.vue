@@ -1,60 +1,56 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="菜单名称" v-model="listQuery.name">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户名" v-model="listQuery.token">
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
-      <router-link to="/store/storeInfo">
-        <el-button class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit">添加</el-button>
-      </router-link>
+      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="edit">添加</el-button>
       <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="263px" align="center" label="店名">
+      <el-table-column width="170px" align="center" label="用户名">
         <template scope="scope">
-          <span>{{scope.row.storeName}}</span>
+          <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="店主">
+      <el-table-column width="170px" align="center" label="密码">
         <template scope="scope">
-          <span>{{scope.row.storeAdmin}}</span>
+          <span>{{scope.row.userPassword}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="80px" align="center" label="餐位费">
+      <el-table-column width="180px" align="center" label="用户角色">
         <template scope="scope">
-          <span>{{scope.row.seatCost}}</span>
+          <span>{{scope.row.userRole}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="90px" align="center" label="服务费">
+      <el-table-column width="170px" align="center" label="联系方式">
         <template scope="scope">
-          <span>{{scope.row.serviceCost}}</span>
+          <span>{{scope.row.userPhone}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" label="电话">
+      <el-table-column width="110px" align="center" label="创建人">
         <template scope="scope">
-          <span>{{scope.row.storePhone}}</span>
+          <span>{{scope.row.creater}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" align="center" label="营业时间">
+      <el-table-column width="180px" align="center" label="创建时间">
         <template scope="scope">
-          <span>{{scope.row.storeBusinessDay || "全年"}}</span><br>
-          <span>上午：{{scope.row.storeBusinessAmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessAmEndHours | parseTime('{h}:{i}')}}</span><br>
-          <span>下午：{{scope.row.storeBusinessPmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessPmEndHours | parseTime('{h}:{i}')}}</span>
+          <span>{{scope.row.createDateTime | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="270">
+      <el-table-column align="center" label="操作" width="150">
         <template scope="scope">
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">餐桌</el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
+          </el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
@@ -70,34 +66,32 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="店名" prop="storeName">
-          <el-input v-model="temp.storeName" name = "storeName"></el-input>
+      <el-form class="small-space" ref="userForm" :rules="userRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="temp.userName" name = "userName"></el-input>
         </el-form-item>
 
-        <el-form-item label="店主" prop="path">
-          <el-input v-model="temp.path" name = "path"></el-input>
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="餐位费" prop="seatCost">
-          <el-input v-model="temp.seatCost" name = "seatCost"></el-input>
+        <el-form-item label="用户角色" prop="userRole">
+          <el-input v-model="temp.userRole" name = "userRole"></el-input>
         </el-form-item>
 
-        <el-form-item label="服务费" prop="serviceCost">
-          <el-input v-model="temp.serviceCost" name = "serviceCost"></el-input>
+        <el-form-item label="联系方式">
+          <el-input v-model="temp.userPhone"></el-input>
         </el-form-item>
 
-        <el-form-item label="电话">
-          <el-input v-model="temp.storePhone"></el-input>
+        <el-form-item label="性别">
+          <el-select class="filter-item" v-model="temp.userSex" placeholder="请选择">
+            <el-option v-for="item in  sexOptions" :key="item" :label="item.name" :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
 
-        <el-form-item label="通知">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.storeNotice">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item label="描述">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userDescription">
+        <el-form-item label="地址">
+          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userAddress">
           </el-input>
         </el-form-item>
       </el-form>
@@ -112,7 +106,7 @@
 </template>
 
 <script>
-    import { getStoresByPage, addStore, deleteStore, updateStore } from 'api/store';
+    import { getUserList, addSystemUser, deleteSystemUser,updateSystemUser } from 'api/login';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -127,33 +121,41 @@
           listQuery: {
             page: 1,
             limit: 20,
-            userId: store.getters.uid
+            userName: undefined
           },
           temp: {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            userName: undefined,
+            userPassword: undefined,
+            userRole: undefined,
+            userPhone: undefined,
+            userSex: undefined,
+            userAddress: undefined,
+            createDateTime: undefined,
+            creater: undefined
           },
-          menuRules: {
-            name: [
+          userRules: {
+            userName: [
                 { required: true, trigger: 'blur'}
             ],
-            path: [
+            userPassword: [
                 { required: true, trigger: 'blur'}
             ],
-            component: [
-                { required: true, trigger: 'blur'}
-            ],
-            role: [
+            userRole: [
                 { required: true, trigger: 'blur'}
             ]
           },
           dialogFormVisible: false,
           dialogStatus: '',
+          sexOptions: [
+            {
+              name: '男',
+              value: 1
+            },
+            {
+              name: '女',
+              value: 0
+            }
+          ],
           textMap: {
             update: '编辑',
             create: '创建'
@@ -167,7 +169,7 @@
       methods: {
         getList() {
           this.listLoading = true;
-          getStoresByPage(this.listQuery).then(response => {
+          getUserList(this.listQuery).then(response => {
             this.list = response.data[0];
             this.total = response.data[1];
             this.listLoading = false;
@@ -197,12 +199,12 @@
           this.dialogFormVisible = true;
         },
         handleUpdate(row) {
-          this.$router.push({
-            path:'/store/storeInfo/' +　row.storeId
-          });
+          this.temp = Object.assign({}, row);
+          this.dialogStatus = 'update';
+          this.dialogFormVisible = true;
         },
         handleDelete(row) {
-          deleteSystemMenu(row.id).then(() => {
+          deleteSystemUser(row.userId).then(response => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -214,11 +216,11 @@
           })
         },
         create() {
-          this.$refs.menuForm.validate(valid => {
+          this.$refs.userForm.validate(valid => {
             if (valid) {
               this.temp.creater = store.getters.name;
               this.temp.modify = store.getters.name;
-              addSystemMenu(this.temp).then(response => {
+              addSystemUser(this.temp).then(response => {
                 this.temp = response.data[0];
                 this.list.unshift(this.temp);
                 this.dialogFormVisible = false;
@@ -236,10 +238,10 @@
           });
         },
         update() {
-          this.$refs.menuForm.validate(valid => {
+          this.$refs.userForm.validate(valid => {
             if (valid) {
               this.temp.modify = store.getters.name;
-              updateSystemMenu(this.temp).then(() => {
+              updateSystemUser(this.temp).then(response => {
                 for (const v of this.list) {
                   if (v.id === this.temp.id) {
                     const index = this.list.indexOf(v);
@@ -263,20 +265,21 @@
         },
         resetTemp() {
           this.temp = {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            userName: undefined,
+            userPassword: undefined,
+            userRole: undefined,
+            userPhone: undefined,
+            userSex: undefined,
+            userAddress: undefined,
+            createDateTime: undefined,
+            creater: undefined
           };
         },
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）', '图片（一级）'];
-            const filterVal = ['name', 'path', 'component', 'role', 'parent', 'redirect', 'icon'];
+            const tHeader = ['用户名', '密码', '用户角色', '联系方式', '创建人', '创建时间', '地址'];
+            const filterVal = ['userName', 'userPassword', 'userRole', 'userPhone', 'creator', 'createDateTime', 'userAddress'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');
           })

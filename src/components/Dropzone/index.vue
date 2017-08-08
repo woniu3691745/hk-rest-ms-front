@@ -20,7 +20,6 @@
       mounted() {
         const element = document.getElementById(this.id);
         const vm = this;
-        debugger;
         this.dropzone = new Dropzone(element, {
           clickable: this.clickable,
           thumbnailWidth: this.thumbnailWidth,

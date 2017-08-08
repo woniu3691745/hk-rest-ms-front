@@ -7,7 +7,8 @@ const app = {
     },
     theme: 'default',
     livenewsChannels: Cookies.get('livenewsChannels') || '[]',
-    visitedViews: []
+    visitedViews: [],
+    currentView:null,
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -20,7 +21,8 @@ const app = {
     },
     ADD_VISITED_VIEWS: (state, view) => {
       if (state.visitedViews.includes(view)) return
-      state.visitedViews.push(view)
+      state.visitedViews.push(view);
+      state.currentView = view;
     },
     DEL_VISITED_VIEWS: (state, view) => {
       const index = state.visitedViews.indexOf(view)

@@ -13,6 +13,6 @@ const getters = {
   setting: state => state.user.setting,
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
-  intiFinish: state => state.user.intiFinish
+  storeId: state => state.user.storeId
 };
 export default getters

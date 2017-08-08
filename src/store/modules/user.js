@@ -64,6 +64,9 @@ const user = {
     },
     LOGOUT_USER: state => {
       state.user = '';
+    },
+    SET_STOREID: (state, storeId) => {
+      state.storeId = storeId;
     }
   },
 
@@ -130,6 +133,7 @@ const user = {
           commit('SET_NAME', userData.userName);
           commit('SET_ROLES', userData.userRole.split(','));
           commit('SET_UID', userData.userId);
+          commit('SET_STOREID', userData.storeId);
           resolve(response);
         }).catch(error => {
           reject(error);
@@ -189,7 +193,6 @@ const user = {
     GetMenuList({ commit, state }) {
       return new Promise((resolve, reject) => {
         fetchSystemMenuList().then(response => {
-          debugger;
           const data = response.data;
           initMenu(data);
           // initMenu(data.items);

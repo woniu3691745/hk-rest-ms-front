@@ -108,6 +108,7 @@
       components: { ImageCropper, PanThumb, Dropzone},
       name: 'table_demo',
       data() {
+        var storeId = this.$route.params.storeId || store.getters.storeId;
         return {
           imagecropperShow: false,
           imagecropperKey: 0,
@@ -136,7 +137,7 @@
                 { required: true, trigger: 'blur'}
             ]
           },
-          formStatus: 'create',
+          formStatus: storeId!=null?'update':'create',
           textMap: {
             update: '编辑',
             create: '创建'
@@ -145,9 +146,21 @@
       },
       created() {
         this.image = "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191";
-        this.defaultImg = "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191";
+        this.defaultImg = ["https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191"];
       },
       methods: {
+        create(){
+          this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+          this.$router.push({
+            path:'/store/store'
+          });
+        },
+        update(){
+          this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+          this.$router.push({
+            path:'/store/store'
+          });
+        },
         resetTemp() {
           this.temp = {
             name: undefined,
