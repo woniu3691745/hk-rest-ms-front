@@ -188,7 +188,8 @@ const user = {
     // 获取菜单数据
     GetMenuList({ commit, state }) {
       return new Promise((resolve, reject) => {
-        fetchSystemMenuList(state.auth_type).then(response => {
+        fetchSystemMenuList().then(response => {
+          debugger;
           const data = response.data;
           initMenu(data);
           // initMenu(data.items);
@@ -218,7 +219,7 @@ function initMenu(menuList) {
       if (!menu.parent && menu.path.indexOf('/') != 0) {
         menu.path = '/' + menu.path;
       }
-      menu.hidden = menu.type === '0';
+      menu.hidden = menu.type === 0;
       if (menu.children) {
         initMenu(menu.children);
       }
