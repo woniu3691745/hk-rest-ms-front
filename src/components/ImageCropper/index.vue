@@ -120,7 +120,7 @@
             // 域，上传文件name，触发事件会带上（如果一个页面多个图片上传控件，可以做区分
             field: {
                 type: String,
-                default: 'avatar'
+                default: 'img'
             },
             // 上传地址
             url: {
@@ -653,7 +653,7 @@
                     createImgUrl
                 } = this,
                 fmData = new FormData();
-            fmData.append(field, data2blob(createImgUrl, mime), field + '.' + imgFormat);
+            fmData.append(field, data2blob(createImgUrl, mime), field + '.' + 'jpg');
             // 添加其他参数
             if (typeof params == 'object' && params) {
                 Object.keys(params).forEach((k) => {

@@ -23,7 +23,7 @@
             <el-button type="primary" icon="upload" style="position: absolute;margin-left: 10px;" @click="imagecropperShow=true">修改门店logo
             </el-button>
 
-            <ImageCropper :width="300" :height="300" url="https://httpbin.org/post" @close='close' @crop-upload-success="cropSuccess"
+            <ImageCropper :width="300" :height="300" url="/api/sysUser/headUpload" @close='close' @crop-upload-success="cropSuccess"
               :key="imagecropperKey" v-show="imagecropperShow" />
           </el-form-item>
         </el-col>
@@ -145,8 +145,8 @@
         }
       },
       created() {
-        this.image = "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191";
-        this.defaultImg = ["https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191"];
+        this.image = "/api/sysUser/headDown/img.jpg";
+        this.defaultImg = ["/api/sysUser/headDowns"];
       },
       methods: {
         create(){
