@@ -75,10 +75,6 @@
           <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户角色" prop="userRole">
-          <el-input v-model="temp.userRole" name = "userRole"></el-input>
-        </el-form-item>
-
         <el-form-item label="联系方式">
           <el-input v-model="temp.userPhone"></el-input>
         </el-form-item>
@@ -126,7 +122,6 @@
           temp: {
             userName: undefined,
             userPassword: undefined,
-            userRole: undefined,
             userPhone: undefined,
             userSex: undefined,
             userAddress: undefined,
@@ -138,9 +133,6 @@
                 { required: true, trigger: 'blur'}
             ],
             userPassword: [
-                { required: true, trigger: 'blur'}
-            ],
-            userRole: [
                 { required: true, trigger: 'blur'}
             ]
           },
