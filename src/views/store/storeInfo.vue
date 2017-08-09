@@ -219,8 +219,16 @@
           this.$message({ message: '上传成功', type: 'success' });
         },
         dropzoneR(file) {
-          console.log(file)
-          this.$message({ message: '删除成功', type: 'success' });
+          // console.log(file)
+          // this.$message({ message: '删除成功', type: 'success' });
+          delStoreImages(file.url).then(() => {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success',
+              duration: 2000
+            });
+          })
         }
       }
     }

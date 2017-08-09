@@ -23,6 +23,18 @@ export function updateStore(query) {
   return service(module, 'update', query);
 }
 
+// 通过当前门店ID获得门店图片
 export function getStoreImages(query) {
-  return service('store', 'storeImgDowns', query, 'get');
+  query = {
+    storeId: '36'
+  }
+  return service('store', 'storeImgDowns', query, 'post');
+}
+
+// 通过文件名字删除文件
+export function delStoreImages(query) {
+  const query1 = {
+    imgUrl: query
+  }
+  return service(module, 'delStoreImg', query1, 'delete');
 }
