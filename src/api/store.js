@@ -4,7 +4,7 @@ import { service } from 'utils/fetchUtil';
 const module = 'store';
 
 export function getAllStores(query) {
-  return service(module, 'all', query, 'get');
+  return service(module, 'get', query, 'post');
 }
 
 export function getStoresByPage(query) {

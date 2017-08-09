@@ -95,7 +95,6 @@
 </template>
 
 <script>
-    import { getStoresByPage, addStore, deleteStore, updateStore } from 'api/store';
     import { parseTime } from 'utils';
 
     import ImageCropper from 'components/ImageCropper';
@@ -104,7 +103,7 @@
 
     import store from 'store';
 
-    import { getStoreImages } from 'api/store';
+    import { getStoreImages, getAllStores, updateStore} from 'api/store';
 
     export default {
       components: { ImageCropper, PanThumb, Dropzone },
@@ -113,6 +112,7 @@
         const storeId = this.$route.params.storeId || store.getters.storeId;
         return {
           imagecropperShow: false,
+          storeId:storeId,
           imagecropperKey: 0,
           image: '',
           defaultImg: '',
@@ -151,6 +151,9 @@
         // this.defaultImg = ["/api/sysUser/headDowns"];
         getStoreImages().then(response => {
           this.defaultImg = response.data;
+        });
+        getAllStores({storeId:this.$data.storeId}).then(response => {
+          this.temp = response.data[0];
         })
       },
       methods: {
@@ -161,10 +164,18 @@
           });
         },
         update() {
-          this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
-          this.$router.push({
-            path: '/store/store'
-          });
+          updateStore(this.temp).then(response => {
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            });
+            this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+              this.$router.push({
+              path: '/store/store'
+            });
+          })
         },
         resetTemp() {
           this.temp = {
