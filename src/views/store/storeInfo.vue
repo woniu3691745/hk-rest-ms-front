@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <h2>{{textMap[formStatus]}}门店</h2>
-    <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
+    <el-form class="small-space" ref="storeForm" :rules="menuRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
       <el-row>
         <el-col :span="12">
           <el-form-item label-width="150px" label="店名" prop="storeName">
@@ -103,7 +103,7 @@
 
     import store from 'store';
 
-    import { getStoreImages, getAllStores, updateStore} from 'api/store';
+    import { getStoreImages, getAllStores, updateStore, addStore} from 'api/store';
 
     export default {
       components: { ImageCropper, PanThumb, Dropzone },
@@ -117,25 +117,13 @@
           image: '',
           defaultImg: '',
           temp: {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            storeBusinessAmStartHours: undefined,
+            storeBusinessAmEndHours: undefined,
+            storeBusinessPmStartHours: undefined,
+            storeBusinessPmEndHours: undefined
           },
           menuRules: {
-            name: [
-                { required: true, trigger: 'blur' }
-            ],
-            path: [
-                { required: true, trigger: 'blur' }
-            ],
-            component: [
-                { required: true, trigger: 'blur' }
-            ],
-            role: [
+            storeName: [
                 { required: true, trigger: 'blur' }
             ]
           },
@@ -161,24 +149,47 @@
       },
       methods: {
         create() {
-          this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
-          this.$router.push({
-            path: '/store/store'
+          this.$refs.storeForm.validate(valid => {
+            if (valid) {
+              addStore(this.temp).then(response => {
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                });
+                this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+                  this.$router.push({
+                  path: '/store/store'
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
           });
         },
         update() {
-          updateStore(this.temp).then(response => {
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            });
-            this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
-              this.$router.push({
-              path: '/store/store'
-            });
-          })
+          this.$refs.storeForm.validate(valid => {
+            if (valid) {
+              updateStore(this.temp).then(response => {
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                });
+                this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+                  this.$router.push({
+                  path: '/store/store'
+                });
+              })
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+          
         },
         resetTemp() {
           this.temp = {

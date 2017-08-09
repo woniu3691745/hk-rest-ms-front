@@ -19,7 +19,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="140px" align="center" label="店主">
+      <el-table-column width="130px" align="center" label="店主">
         <template scope="scope">
           <span>{{scope.row.storeAdmin}}</span>
         </template>
@@ -46,8 +46,8 @@
       <el-table-column width="170px" align="center" label="营业时间">
         <template scope="scope">
           <span>{{scope.row.storeBusinessDay || "全年"}}</span><br>
-          <span>上午：{{scope.row.storeBusinessAmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessAmEndHours | parseTime('{h}:{i}')}}</span><br>
-          <span>下午：{{scope.row.storeBusinessPmStartHours | parseTime('{h}:{i}')}} - {{scope.row.storeBusinessPmEndHours | parseTime('{h}:{i}')}}</span>
+          <span>上午：{{scope.row.storeBusinessAmStartHours}} - {{scope.row.storeBusinessAmEndHours}}</span><br>
+          <span>下午：{{scope.row.storeBusinessPmStartHours}} - {{scope.row.storeBusinessPmEndHours}}</span>
         </template>
       </el-table-column>
 
@@ -55,6 +55,7 @@
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">餐桌</el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">授权</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
@@ -122,7 +123,7 @@
       data() {
         var roles = store.getters.roles;
         return {
-          addBtnRole:roles.indexOf("admin")==-1,
+          addBtnRole:roles.indexOf("boss")>-1,
           list: null,
           total: null,
           listLoading: true,
