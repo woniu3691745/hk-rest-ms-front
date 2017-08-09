@@ -150,7 +150,6 @@
         this.image = '/api/store/storeLogoDown/img.jpg';
         // this.defaultImg = ["/api/sysUser/headDowns"];
         getStoreImages().then(response => {
-          debugger;
           this.defaultImg = response.data;
         })
       },
@@ -178,13 +177,17 @@
             icon: undefined
           };
         },
-        cropSuccess(resData) {
+        logoFinish(){
           this.imagecropperShow = false;
           this.imagecropperKey = this.imagecropperKey + 1;
-          this.image = resData.files.avatar;
+          this.image = '/api/store/storeLogoDown/img.jpg?l=' +　new Date().getTime();
+        },
+        cropSuccess() {
+          this.logoFinish();
         },
         close() {
           this.imagecropperShow = false;
+          //this.logoFinish(); 
         },
         dropzoneS(file) {
           console.log(file)
