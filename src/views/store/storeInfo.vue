@@ -23,7 +23,7 @@
             <el-button type="primary" icon="upload" style="position: absolute;margin-left: 10px;" @click="imagecropperShow=true">修改门店logo
             </el-button>
 
-            <ImageCropper :width="300" :height="300" url="/api/sysUser/headUpload" @close='close' @crop-upload-success="cropSuccess"
+            <ImageCropper :width="300" :height="300" url="/api/store/storeLogoUpload" @close='close' @crop-upload-success="cropSuccess"
               :key="imagecropperKey" v-show="imagecropperShow" />
           </el-form-item>
         </el-col>
@@ -84,7 +84,7 @@
 
       <el-form-item label="门店图片">
         <Dropzone  v-on:dropzone-removedFile="dropzoneR" v-on:dropzone-success="dropzoneS" id="myVueDropzone"
-            url="api/sysUser/headDown//img.jpg" :defaultImg = 'defaultImg'></Dropzone>
+            url="api/store/storeImgUpload" :defaultImg = 'defaultImg'></Dropzone>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -107,15 +107,15 @@
     import { getStoreImages } from 'api/store';
 
     export default {
-      components: { ImageCropper, PanThumb, Dropzone},
+      components: { ImageCropper, PanThumb, Dropzone },
       name: 'table_demo',
       data() {
-        var storeId = this.$route.params.storeId || store.getters.storeId;
+        const storeId = this.$route.params.storeId || store.getters.storeId;
         return {
           imagecropperShow: false,
           imagecropperKey: 0,
           image: '',
-          defaultImg:'',
+          defaultImg: '',
           temp: {
             name: undefined,
             path: undefined,
@@ -127,19 +127,19 @@
           },
           menuRules: {
             name: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur' }
             ],
             path: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur' }
             ],
             component: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur' }
             ],
             role: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur' }
             ]
           },
-          formStatus: storeId!=null?'update':'create',
+          formStatus: storeId != null ? 'update' : 'create',
           textMap: {
             update: '编辑',
             create: '创建'
@@ -147,24 +147,24 @@
         }
       },
       created() {
-        this.image = "/api/sysUser/headDown/img.jpg";
-        //this.defaultImg = ["/api/sysUser/headDowns"];
+        this.image = '/api/store/storeLogoDown/img.jpg';
+        // this.defaultImg = ["/api/sysUser/headDowns"];
         getStoreImages().then(response => {
-            debugger;
-            this.defaultImg = response.data;
-          })
+          debugger;
+          this.defaultImg = response.data;
+        })
       },
       methods: {
-        create(){
+        create() {
           this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
           this.$router.push({
-            path:'/store/store'
+            path: '/store/store'
           });
         },
-        update(){
+        update() {
           this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
           this.$router.push({
-            path:'/store/store'
+            path: '/store/store'
           });
         },
         resetTemp() {
