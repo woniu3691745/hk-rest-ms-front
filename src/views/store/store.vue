@@ -55,7 +55,7 @@
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">餐桌</el-button>
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">授权</el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">菜品</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
@@ -69,45 +69,6 @@
         :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="left" label-width="150px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="店名" prop="storeName">
-          <el-input v-model="temp.storeName" name = "storeName"></el-input>
-        </el-form-item>
-
-        <el-form-item label="店主" prop="path">
-          <el-input v-model="temp.path" name = "path"></el-input>
-        </el-form-item>
-
-        <el-form-item label="餐位费" prop="seatCost">
-          <el-input v-model="temp.seatCost" name = "seatCost"></el-input>
-        </el-form-item>
-
-        <el-form-item label="服务费" prop="serviceCost">
-          <el-input v-model="temp.serviceCost" name = "serviceCost"></el-input>
-        </el-form-item>
-
-        <el-form-item label="电话">
-          <el-input v-model="temp.storePhone"></el-input>
-        </el-form-item>
-
-        <el-form-item label="通知">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.storeNotice">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item label="描述">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userDescription">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="create">确 定</el-button>
-        <el-button v-else type="primary" @click="update">确 定</el-button>
-      </div>
-    </el-dialog>
 
   </div>
 </template>
@@ -197,6 +158,10 @@
         handleCreate() {
           this.resetTemp();
           this.dialogStatus = 'create';
+          this.dialogFormVisible = true;
+        },
+        handleCreate() {
+          debugger;
           this.dialogFormVisible = true;
         },
         handleUpdate(row) {

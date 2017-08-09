@@ -11,25 +11,25 @@
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="170px" align="center" label="用户名">
+      <el-table-column width="130px" align="center" label="用户名">
         <template scope="scope">
           <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" align="center" label="密码">
+      <el-table-column width="130px" align="center" label="管理门店名">
         <template scope="scope">
-          <span>{{scope.row.userPassword}}</span>
+          <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="用户角色">
+      <el-table-column width="130px" align="center" label="用户角色">
         <template scope="scope">
           <span>{{scope.row.userRole}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" align="center" label="联系方式">
+      <el-table-column width="150px" align="center" label="联系方式">
         <template scope="scope">
           <span>{{scope.row.userPhone}}</span>
         </template>
@@ -47,7 +47,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="300px">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
           </el-button>
@@ -73,6 +73,13 @@
 
         <el-form-item label="密码" prop="userPassword">
           <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
+        </el-form-item>
+
+        <el-form-item label="管理门店" v-if="storeRole">
+          <el-select class="filter-item" v-model="temp.storeId" placeholder="请选择">
+            <el-option v-for="item in  storeOptions" :key="item" :label="item.storeName" :value="item.storeId">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="联系方式">
@@ -103,6 +110,7 @@
 
 <script>
     import { getUserList, addSystemUser, deleteSystemUser,updateSystemUser } from 'api/login';
+    import { getAllStores} from 'api/store';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -110,7 +118,9 @@
     export default {
       name: 'table_demo',
       data() {
+        var roles = store.getters.roles;
         return {
+          storeRole:roles.indexOf("boss")>-1,
           list: null,
           total: null,
           listLoading: true,
@@ -126,6 +136,7 @@
             userSex: undefined,
             userAddress: undefined,
             createDateTime: undefined,
+            storeId:undefined,
             creater: undefined
           },
           userRules: {
@@ -138,6 +149,7 @@
           },
           dialogFormVisible: false,
           dialogStatus: '',
+          storeOptions:[],
           sexOptions: [
             {
               name: '男',
@@ -157,6 +169,9 @@
       },
       created() {
         this.getList();
+        getAllStores({userId:null}).then(response => {
+          this.storeOptions = response.data;
+        })
       },
       methods: {
         getList() {
@@ -263,6 +278,7 @@
             userSex: undefined,
             userAddress: undefined,
             createDateTime: undefined,
+            storeId:undefined,
             creater: undefined
           };
         },
