@@ -152,9 +152,12 @@
         getStoreImages().then(response => {
           this.defaultImg = response.data;
         });
-        getAllStores({storeId:this.$data.storeId}).then(response => {
-          this.temp = response.data[0];
-        })
+        var storeId = this.$data.storeId;
+        if(storeId){
+          getAllStores({storeId:storeId}).then(response => {
+            this.temp = response.data[0];
+          })
+        }
       },
       methods: {
         create() {

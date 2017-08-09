@@ -6,7 +6,7 @@
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
       <router-link to="/store/storeInfo">
-        <el-button class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit">添加</el-button>
+        <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit">添加</el-button>
       </router-link>
       <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
@@ -120,7 +120,9 @@
     export default {
       name: 'table_demo',
       data() {
+        var roles = store.getters.roles;
         return {
+          addBtnRole:roles.indexOf("admin")==-1,
           list: null,
           total: null,
           listLoading: true,
@@ -202,7 +204,7 @@
           });
         },
         handleDelete(row) {
-          deleteSystemMenu(row.id).then(() => {
+          deleteStore(row.storeId).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
