@@ -224,7 +224,7 @@
         },
         dropzoneR(file) {
           if(!this.$data.backFlag){
-            delStoreImages({imgUrl:file.url}).then(() => {
+            delStoreImages({imgUrl:file.url,storeId:this.$data.storeId}).then(() => {
               this.$notify({
                 title: '成功',
                 message: '删除成功',
