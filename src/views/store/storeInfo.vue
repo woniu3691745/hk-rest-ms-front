@@ -103,7 +103,7 @@
 
     import store from 'store';
 
-    import { getStoreImages, getAllStores, updateStore, addStore} from 'api/store';
+    import { getStoreImages, getAllStores, updateStore, addStore, delStoreImages} from 'api/store';
 
     export default {
       components: { ImageCropper, PanThumb, Dropzone },
@@ -112,6 +112,7 @@
         const storeId = this.$route.params.storeId || store.getters.storeId;
         return {
           imagecropperShow: false,
+          backFlag:false,
           storeId:storeId,
           imagecropperKey: 0,
           image: '',
@@ -136,7 +137,6 @@
       },
       created() {
         this.image = '/api/store/storeLogoDown/img.jpg';
-        // this.defaultImg = ["/api/sysUser/headDowns"];
         var storeId = this.$data.storeId;
         if(storeId){
           getStoreImages({storeId:storeId}).then(response => {
@@ -151,6 +151,7 @@
         create() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
+              this.makeStoreImg();
               addStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -158,10 +159,7 @@
                   type: 'success',
                   duration: 2000
                 });
-                this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
-                  this.$router.push({
-                  path: '/store/store'
-                });
+                this.backStorePage();
               })
             } else {
               console.log('error submit!!');
@@ -172,6 +170,7 @@
         update() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
+              this.makeStoreImg();
               updateStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -179,10 +178,7 @@
                   type: 'success',
                   duration: 2000
                 });
-                this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
-                  this.$router.push({
-                  path: '/store/store'
-                });
+                this.backStorePage();
               })
             } else {
               console.log('error submit!!');
@@ -191,16 +187,20 @@
           });
           
         },
-        resetTemp() {
-          this.temp = {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
-          };
+
+        backStorePage(){
+          this.$data.backFlag = true;
+          this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
+          this.$router.push({
+            path: '/store/store'
+          });
+        },
+        makeStoreImg(){
+          var storeImgs = document.querySelectorAll(".dropzone img[data-dz-thumbnail]");
+          this.temp.storeImg = [];
+          for(var i = 0; i < storeImgs.length; i++){
+            this.temp.storeImg.push(storeImgs[i].alt);
+          }
         },
         logoFinish(){
           this.imagecropperShow = false;
@@ -212,23 +212,22 @@
         },
         close() {
           this.imagecropperShow = false;
-          //this.logoFinish(); 
         },
         dropzoneS(file) {
           console.log(file)
           this.$message({ message: '上传成功', type: 'success' });
         },
         dropzoneR(file) {
-          // console.log(file)
-          // this.$message({ message: '删除成功', type: 'success' });
-          delStoreImages({imgUrl:file.url}).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '删除成功',
-              type: 'success',
-              duration: 2000
-            });
-          })
+          if(!this.$data.backFlag){
+            delStoreImages({imgUrl:file.url}).then(() => {
+              this.$notify({
+                title: '成功',
+                message: '删除成功',
+                type: 'success',
+                duration: 2000
+              });
+            })
+          }
         }
       }
     }
