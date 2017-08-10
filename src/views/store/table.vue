@@ -1,64 +1,44 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户名" v-model="listQuery.token">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="菜单名称" v-model="listQuery.name">
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="edit">添加</el-button>
+      <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleCreate()">添加</el-button>
+      <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleCreate()">批量添加</el-button>
       <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="170px" align="center" label="用户名">
+      <el-table-column width="263px" align="center" label="菜名">
         <template scope="scope">
-          <span>{{scope.row.userName}}</span>
+          <span>{{scope.row.dishesName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" align="center" label="密码">
+      <el-table-column width="130px" align="center" label="价格">
         <template scope="scope">
-          <span>{{scope.row.userPassword}}</span>
+          <span>{{scope.row.dishesPrice}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="用户角色">
+      <el-table-column width="80px" align="center" label="折扣">
         <template scope="scope">
-          <span>{{scope.row.userRole}}</span>
+          <span>{{scope.row.dishesDiscountPrice}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="170px" align="center" label="联系方式">
+      <el-table-column align="center" label="操作" width="270">
         <template scope="scope">
-          <span>{{scope.row.userPhone}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="110px" align="center" label="创建人">
-        <template scope="scope">
-          <span>{{scope.row.creater}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column width="180px" align="center" label="创建时间">
-        <template scope="scope">
-          <span>{{scope.row.createDateTime | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="操作" width="150">
-        <template scope="scope">
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
-          </el-button>
+          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
 
     </el-table>
-    </el-table>
-
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
         :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -66,33 +46,17 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" ref="userForm" :rules="userRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="temp.userName" name = "userName"></el-input>
+      <el-form class="small-space" ref="userForm" :rules="menuRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="菜名" prop="dishesName">
+          <el-input v-model="temp.dishesName" name = "dishesName"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="userPassword">
-          <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
+        <el-form-item label="价格" prop="dishesPrice">
+          <el-input v-model="temp.dishesPrice" name = "dishesPrice"></el-input>
         </el-form-item>
 
-        <el-form-item label="用户角色" prop="userRole">
-          <el-input v-model="temp.userRole" name = "userRole"></el-input>
-        </el-form-item>
-
-        <el-form-item label="联系方式">
-          <el-input v-model="temp.userPhone"></el-input>
-        </el-form-item>
-
-        <el-form-item label="性别">
-          <el-select class="filter-item" v-model="temp.userSex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item.name" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="地址">
-          <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.userAddress">
-          </el-input>
+        <el-form-item label="折扣" prop="dishesDiscountPrice">
+          <el-input v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -106,7 +70,7 @@
 </template>
 
 <script>
-    import { getUserList, addSystemUser, deleteSystemUser,updateSystemUser } from 'api/login';
+    import { getTablesByPage, addTable, deleteTable, updateTable } from 'api/storeTable';
     import { parseTime } from 'utils';
 
     import store from 'store';
@@ -114,48 +78,34 @@
     export default {
       name: 'table_demo',
       data() {
+        const storeId = this.$route.params.storeId || store.getters.storeId;
+        var roles = store.getters.roles;
         return {
+          addBtnRole:roles.indexOf("boss")>-1,
+          storeId:storeId,
           list: null,
           total: null,
-          listLoading: true,
+          listLoading: false,
           listQuery: {
             page: 1,
             limit: 20,
-            userName: undefined
+            storeId: storeId
           },
           temp: {
-            userName: undefined,
-            userPassword: undefined,
-            userRole: undefined,
-            userPhone: undefined,
-            userSex: undefined,
-            userAddress: undefined,
-            createDateTime: undefined,
-            creater: undefined
+            dishesName: undefined,
+            dishesPrice: undefined,
+            dishesDiscountPrice: undefined
           },
-          userRules: {
-            userName: [
+          menuRules: {
+            dishesName: [
                 { required: true, trigger: 'blur'}
             ],
-            userPassword: [
-                { required: true, trigger: 'blur'}
-            ],
-            userRole: [
+            dishesPrice: [
                 { required: true, trigger: 'blur'}
             ]
           },
           dialogFormVisible: false,
           dialogStatus: '',
-          sexOptions: [
-            {
-              name: '男',
-              value: 1
-            },
-            {
-              name: '女',
-              value: 0
-            }
-          ],
           textMap: {
             update: '编辑',
             create: '创建'
@@ -164,12 +114,12 @@
         }
       },
       created() {
-        this.getList();
+        //this.getList();
       },
       methods: {
         getList() {
           this.listLoading = true;
-          getUserList(this.listQuery).then(response => {
+          getTablesByPage(this.listQuery).then(response => {
             this.list = response.data[0];
             this.total = response.data[1];
             this.listLoading = false;
@@ -204,7 +154,7 @@
           this.dialogFormVisible = true;
         },
         handleDelete(row) {
-          deleteSystemUser(row.userId).then(response => {
+          deleteStore(row.storeId).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -216,11 +166,11 @@
           })
         },
         create() {
-          this.$refs.userForm.validate(valid => {
+          this.$refs.menuForm.validate(valid => {
             if (valid) {
               this.temp.creater = store.getters.name;
               this.temp.modify = store.getters.name;
-              addSystemUser(this.temp).then(response => {
+              addSystemMenu(this.temp).then(response => {
                 this.temp = response.data[0];
                 this.list.unshift(this.temp);
                 this.dialogFormVisible = false;
@@ -238,10 +188,10 @@
           });
         },
         update() {
-          this.$refs.userForm.validate(valid => {
+          this.$refs.menuForm.validate(valid => {
             if (valid) {
               this.temp.modify = store.getters.name;
-              updateSystemUser(this.temp).then(response => {
+              updateSystemMenu(this.temp).then(() => {
                 for (const v of this.list) {
                   if (v.id === this.temp.id) {
                     const index = this.list.indexOf(v);
@@ -265,21 +215,16 @@
         },
         resetTemp() {
           this.temp = {
-            userName: undefined,
-            userPassword: undefined,
-            userRole: undefined,
-            userPhone: undefined,
-            userSex: undefined,
-            userAddress: undefined,
-            createDateTime: undefined,
-            creater: undefined
+            dishesName: undefined,
+            dishesPrice: undefined,
+            dishesDiscountPrice: undefined
           };
         },
         handleDownload() {
           require.ensure([], () => {
             const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['用户名', '密码', '用户角色', '联系方式', '创建人', '创建时间', '地址'];
-            const filterVal = ['userName', 'userPassword', 'userRole', 'userPhone', 'creator', 'createDateTime', 'userAddress'];
+            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）', '图片（一级）'];
+            const filterVal = ['name', 'path', 'component', 'role', 'parent', 'redirect', 'icon'];
             const data = this.formatJson(filterVal, this.list);
             export_json_to_excel(tHeader, data, 'table数据');
           })

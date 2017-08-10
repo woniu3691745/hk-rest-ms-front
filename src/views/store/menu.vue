@@ -5,9 +5,7 @@
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
-      <router-link to="/store/storeInfo">
-        <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit">添加</el-button>
-      </router-link>
+      <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleCreate()">添加</el-button>
       <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
 
@@ -40,13 +38,32 @@
       </el-table-column>
 
     </el-table>
-    </el-table>
-
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
         :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form class="small-space" ref="userForm" :rules="menuRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
+        <el-form-item label="菜名" prop="dishesName">
+          <el-input v-model="temp.dishesName" name = "dishesName"></el-input>
+        </el-form-item>
+
+        <el-form-item label="价格" prop="dishesPrice">
+          <el-input v-model="temp.dishesPrice" name = "dishesPrice"></el-input>
+        </el-form-item>
+
+        <el-form-item label="折扣" prop="dishesDiscountPrice">
+          <el-input v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button v-if="dialogStatus=='create'" type="primary" @click="create">确 定</el-button>
+        <el-button v-else type="primary" @click="update">确 定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -74,25 +91,15 @@
             storeId: storeId
           },
           temp: {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            dishesName: undefined,
+            dishesPrice: undefined,
+            dishesDiscountPrice: undefined
           },
           menuRules: {
-            name: [
+            dishesName: [
                 { required: true, trigger: 'blur'}
             ],
-            path: [
-                { required: true, trigger: 'blur'}
-            ],
-            component: [
-                { required: true, trigger: 'blur'}
-            ],
-            role: [
+            dishesPrice: [
                 { required: true, trigger: 'blur'}
             ]
           },
@@ -140,13 +147,10 @@
           this.dialogStatus = 'create';
           this.dialogFormVisible = true;
         },
-        handleCreate() {
-          this.dialogFormVisible = true;
-        },
         handleUpdate(row) {
-          this.$router.push({
-            path:'/store/storeInfo/' +　row.storeId
-          });
+          this.temp = Object.assign({}, row);
+          this.dialogStatus = 'update';
+          this.dialogFormVisible = true;
         },
         handleDelete(row) {
           deleteStore(row.storeId).then(() => {
@@ -210,13 +214,9 @@
         },
         resetTemp() {
           this.temp = {
-            name: undefined,
-            path: undefined,
-            component: undefined,
-            role: undefined,
-            parent: undefined,
-            redirect: undefined,
-            icon: undefined
+            dishesName: undefined,
+            dishesPrice: undefined,
+            dishesDiscountPrice: undefined
           };
         },
         handleDownload() {

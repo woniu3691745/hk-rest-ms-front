@@ -54,7 +54,7 @@
       <el-table-column align="center" label="操作" width="270">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">餐桌</el-button>
+          <el-button  size="small" type="success" @click="handleTable(scope.row)">餐桌</el-button>
           <el-button  size="small" type="success" @click="handleMenu(scope.row)">菜品</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
@@ -171,6 +171,11 @@
         handleMenu(row) {
           this.$router.push({
             path:'/store/menuInfo/' +　row.storeId
+          });
+        },
+        handleTable(row) {
+          this.$router.push({
+            path:'/store/tableInfo/' +　row.storeId
           });
         },
         handleDelete(row) {
