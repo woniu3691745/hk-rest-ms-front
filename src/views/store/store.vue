@@ -55,7 +55,7 @@
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">餐桌</el-button>
-          <el-button  size="small" type="success" @click="handleUpdate(scope.row)">菜品</el-button>
+          <el-button  size="small" type="success" @click="handleMenu(scope.row)">菜品</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
@@ -167,6 +167,11 @@
         handleUpdate(row) {
           this.$router.push({
             path:'/store/storeInfo/' +　row.storeId
+          });
+        },
+        handleMenu(row) {
+          this.$router.push({
+            path:'/store/menuInfo/' +　row.storeId
           });
         },
         handleDelete(row) {
