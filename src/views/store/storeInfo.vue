@@ -151,7 +151,7 @@
         create() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
-              this.makeStoreImg();
+              //this.makeStoreImg();
               addStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -170,7 +170,7 @@
         update() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
-              this.makeStoreImg();
+              //this.makeStoreImg();
               updateStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -213,9 +213,13 @@
         close() {
           this.imagecropperShow = false;
         },
-        dropzoneS(file) {
-          console.log(file)
-          this.$message({ message: '上传成功', type: 'success' });
+        dropzoneS(file,response) {
+          if(response.code == 200){
+            console.log(file);
+            !this.temp.path && (this.temp.path = []);
+            this.temp.path.push(response.msg1 + "/" + file.name);
+            this.$message({ message: '上传成功', type: 'success' });
+          }
         },
         dropzoneR(file) {
           if(!this.$data.backFlag){

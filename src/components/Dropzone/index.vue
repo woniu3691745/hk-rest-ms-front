@@ -90,8 +90,8 @@
           document.addEventListener('paste', this.pasteImg)
         }
 
-        this.dropzone.on('success', file => {
-          vm.$emit('dropzone-success', file, vm.dropzone.element)
+        this.dropzone.on('success', (file, error, xhr) => {
+          vm.$emit('dropzone-success', file, error, xhr, vm.dropzone.element)
         });
         this.dropzone.on('addedfile', file => {
           vm.$emit('dropzone-fileAdded', file)
