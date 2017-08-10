@@ -218,13 +218,23 @@
           if(response.code == 200){
             console.log(file);
             !this.temp.storeImg && (this.temp.storeImg = []);
-            this.temp.storeImg.push(response.msg1 + "/" + file.name);
+            var path = response.msg1 + "/" + file.name;
+            this.temp.storeImg.push(path);
+            file.url = "api/store/storeImgDown/" +　path;
             this.$message({ message: '上传成功', type: 'success' });
           }
         },
         dropzoneR(file) {
           if(!this.$data.backFlag){
-            delStoreImages({imgUrl:file.url,storeId:this.$data.storeId}).then(() => {
+            delStoreImages({imgUrl:file.url,storeId:this.$data.storeId}).then((response) => {
+              /*var url = response.data;
+              if(this.temp.storeImg){
+                for(var i = 0; i < this.temp.storeImg.length; i++){
+                  if(url == this.temp.storeImg[i]){
+                    this.temp.storeImg.splice(i,1);
+                  }
+                }
+              }*/
               this.$notify({
                 title: '成功',
                 message: '删除成功',
