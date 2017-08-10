@@ -121,7 +121,8 @@
             storeBusinessAmStartHours: undefined,
             storeBusinessAmEndHours: undefined,
             storeBusinessPmStartHours: undefined,
-            storeBusinessPmEndHours: undefined
+            storeBusinessPmEndHours: undefined,
+            storeImg:[]
           },
           menuRules: {
             storeName: [
@@ -216,8 +217,8 @@
         dropzoneS(file,response) {
           if(response.code == 200){
             console.log(file);
-            !this.temp.path && (this.temp.path = []);
-            this.temp.path.push(response.msg1 + "/" + file.name);
+            !this.temp.storeImg && (this.temp.storeImg = []);
+            this.temp.storeImg.push(response.msg1 + "/" + file.name);
             this.$message({ message: '上传成功', type: 'success' });
           }
         },
