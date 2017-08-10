@@ -30,9 +30,7 @@
     export default {
       name: 'SidebarItem',
       data() {
-        debugger;
         const roles = store.getters.roles;
-        debugger;
         return {
           logoUrl: roles.indexOf("user")>-1?'/api/store/storeLogoDown/img.jpg':'https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191'
         }

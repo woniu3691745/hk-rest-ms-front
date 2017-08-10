@@ -25,9 +25,6 @@ export function updateStore(query) {
 
 // 通过当前门店ID获得门店图片
 export function getStoreImages(query) {
-  query = {
-    storeId: '36'
-  }
   return service('store', 'storeImgDowns', query, 'post');
 }
 
@@ -36,5 +33,5 @@ export function delStoreImages(query) {
   const query1 = {
     imgUrl: query
   }
-  return service(module, 'delStoreImg', query1, 'delete');
+  return service(module, 'delStoreImg', query, 'delete');
 }

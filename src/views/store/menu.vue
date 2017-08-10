@@ -111,9 +111,7 @@
       methods: {
         getList() {
           this.listLoading = true;
-          debugger;
           getMenusByPage(this.listQuery).then(response => {
-            debugger;
             this.list = response.data[0];
             this.total = response.data[1];
             this.listLoading = false;
@@ -143,7 +141,6 @@
           this.dialogFormVisible = true;
         },
         handleCreate() {
-          debugger;
           this.dialogFormVisible = true;
         },
         handleUpdate(row) {

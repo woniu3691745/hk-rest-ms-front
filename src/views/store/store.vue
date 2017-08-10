@@ -161,7 +161,6 @@
           this.dialogFormVisible = true;
         },
         handleCreate() {
-          debugger;
           this.dialogFormVisible = true;
         },
         handleUpdate(row) {

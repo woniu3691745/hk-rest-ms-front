@@ -137,11 +137,11 @@
       created() {
         this.image = '/api/store/storeLogoDown/img.jpg';
         // this.defaultImg = ["/api/sysUser/headDowns"];
-        getStoreImages().then(response => {
-          this.defaultImg = response.data;
-        });
         var storeId = this.$data.storeId;
         if(storeId){
+          getStoreImages({storeId:storeId}).then(response => {
+            this.defaultImg = response.data;
+          });
           getAllStores({storeId:storeId}).then(response => {
             this.temp = response.data[0];
           })
@@ -221,7 +221,7 @@
         dropzoneR(file) {
           // console.log(file)
           // this.$message({ message: '删除成功', type: 'success' });
-          delStoreImages(file.url).then(() => {
+          delStoreImages({imgUrl:file.url}).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
