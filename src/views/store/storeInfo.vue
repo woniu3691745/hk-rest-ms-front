@@ -122,7 +122,7 @@
             storeBusinessAmEndHours: undefined,
             storeBusinessPmStartHours: undefined,
             storeBusinessPmEndHours: undefined,
-            storeImg:[]
+            storeImg:undefined
           },
           menuRules: {
             storeName: [
