@@ -227,14 +227,15 @@
         dropzoneR(file) {
           if(!this.$data.backFlag){
             delStoreImages({imgUrl:file.url,storeId:this.$data.storeId}).then((response) => {
-              /*var url = response.data;
+              var url = response.data.msg;
               if(this.temp.storeImg){
                 for(var i = 0; i < this.temp.storeImg.length; i++){
                   if(url == this.temp.storeImg[i]){
                     this.temp.storeImg.splice(i,1);
+                    break;
                   }
                 }
-              }*/
+              }
               this.$notify({
                 title: '成功',
                 message: '删除成功',
