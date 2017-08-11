@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img v-bind:src="logoUrl"  style='margin-top: 10px;margin-left: 10px;width: 160px;' />
+        <img v-bind:src="logoUrl"  style='margin-top: 10px;margin-left: 10px;width: 160px;border-radius: 25px;' />
         <template v-for="item in routes">
             <router-link v-if="!item.hidden&&item.noDropdown&&item.children.length>0" :to="item.path+'/'+item.children[0].path">
                 <el-menu-item :index="item.path+'/'+item.children[0].path">
@@ -32,7 +32,7 @@
       data() {
         const roles = store.getters.roles;
         return {
-          logoUrl: roles.indexOf("user")>-1?'/api/store/storeLogoDown/img.jpg':'https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191'
+          logoUrl: roles.indexOf("user")>-1?'/api/store/storeLogoDown/img.jpg':'/image/companyLogo.jpeg'
         }
       },
       props: {
