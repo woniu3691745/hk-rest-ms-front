@@ -203,7 +203,7 @@
         logoFinish(){
           this.imagecropperShow = false;
           this.imagecropperKey = this.imagecropperKey + 1;
-          this.image = this.$data.formStatus=='create'?'/api/store/add/storeLogoDown/' + this.$data.uploadLogoNum +'/img.jpg?l=' +　new Date().getTime():'/api/store/edit/storeLogoDown/' + this.$data.storeId +'/img.jpg?l=' +　new Date().getTime();
+          this.image = '/api/store/add/storeLogoDown/' + this.$data.uploadLogoNum +'/img.jpg?l=' +　new Date().getTime();
           this.temp.storeLogo = this.$data.uploadLogoNum + "/img.jpg";
         },
         cropSuccess() {
