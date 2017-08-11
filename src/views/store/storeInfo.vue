@@ -144,7 +144,7 @@
       created() {
         var storeId = this.$data.storeId;
         this.image = this.$data.formStatus=='create'?'/image/companyLogo.jpeg':'/api/store/edit/storeLogoDown/'
-                     + storeId +'/img.jpg';
+                     + storeId +'/img.jpg?l=' +　new Date().getTime();
         if(storeId){
           getStoreImages({storeId:storeId}).then(response => {
             this.defaultImg = response.data;
