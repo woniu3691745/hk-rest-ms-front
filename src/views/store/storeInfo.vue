@@ -109,11 +109,14 @@
       components: { ImageCropper, PanThumb, Dropzone },
       name: 'table_demo',
       data() {
-        const storeId = this.$route.params.storeId || store.getters.storeId;
+        const storeId = this.$route.params.storeId || store.getters.storeId,
+              userId = store.getters.uid,
+              uploadLogoNum = userId + new Date().getTime();
         return {
           imagecropperShow: false,
-          storeImgUrl:"api/store/storeImgUpload/" + storeId,
-          storeLogoUrl:"/api/store/storeLogoUpload/" + storeId,
+          storeImgUrl:"api/store/storeImgUpload",
+          uploadLogoNum:uploadLogoNum,
+          storeLogoUrl:"/api/store/storeLogoUpload/" + uploadLogoNum,
           backFlag:false,
           storeId:storeId,
           imagecropperKey: 0,
@@ -139,8 +142,9 @@
         }
       },
       created() {
-        this.image = this.$data.formStatus=='create'?'/image/companyLogo.jpeg':'/api/store/storeLogoDown/img.jpg';
         var storeId = this.$data.storeId;
+        this.image = this.$data.formStatus=='create'?'/image/companyLogo.jpeg':'/api/store/edit/storeLogoDown/'
+                     + storeId +'/img.jpg';
         if(storeId){
           getStoreImages({storeId:storeId}).then(response => {
             this.defaultImg = response.data;
@@ -154,7 +158,6 @@
         create() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
-              //this.makeStoreImg();
               addStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -173,7 +176,6 @@
         update() {
           this.$refs.storeForm.validate(valid => {
             if (valid) {
-              //this.makeStoreImg();
               updateStore(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -198,17 +200,11 @@
             path: '/store/store'
           });
         },
-        makeStoreImg(){
-          var storeImgs = document.querySelectorAll(".dropzone img[data-dz-thumbnail]");
-          this.temp.storeImg = [];
-          for(var i = 0; i < storeImgs.length; i++){
-            this.temp.storeImg.push(storeImgs[i].alt);
-          }
-        },
         logoFinish(){
           this.imagecropperShow = false;
           this.imagecropperKey = this.imagecropperKey + 1;
-          this.image = '/api/store/storeLogoDown/img.jpg?l=' +　new Date().getTime();
+          this.image = this.$data.formStatus=='create'?'/api/store/add/storeLogoDown/' + this.$data.uploadLogoNum +'/img.jpg?l=' +　new Date().getTime():'/api/store/storeLogoDown/' + this.$data.storeId +'/img.jpg?l=' +　new Date().getTime();
+          this.temp.storeLogo = this.$data.uploadLogoNum + "/img.jpg";
         },
         cropSuccess() {
           this.logoFinish();
