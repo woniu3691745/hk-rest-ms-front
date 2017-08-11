@@ -21,7 +21,9 @@
           $event.preventDefault()
         },
         addViewTabs() {
-          this.$store.dispatch('addVisitedViews', this.$route.matched[this.$route.matched.length - 1])
+          var currentView = this.$route.matched[this.$route.matched.length - 1];
+          currentView.path = this.$route.path;
+          this.$store.dispatch('addVisitedViews', currentView);
         }
       },
       watch: {
