@@ -23,7 +23,7 @@
             <el-button type="primary" icon="upload" style="position: absolute;margin-left: 10px;" @click="imagecropperShow=true">修改门店logo
             </el-button>
 
-            <ImageCropper :width="300" :height="300" url="/api/store/storeLogoUpload" @close='close' @crop-upload-success="cropSuccess"
+            <ImageCropper :width="300" :height="300" :url="storeLogoUrl" @close='close' @crop-upload-success="cropSuccess"
               :key="imagecropperKey" v-show="imagecropperShow" />
           </el-form-item>
         </el-col>
@@ -84,7 +84,7 @@
 
       <el-form-item label="门店图片">
         <Dropzone  v-on:dropzone-removedFile="dropzoneR" v-on:dropzone-success="dropzoneS" id="myVueDropzone"
-            url="api/store/storeImgUpload" :defaultImg = 'defaultImg'></Dropzone>
+            :url="storeImgUrl" :defaultImg = 'defaultImg'></Dropzone>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -112,6 +112,8 @@
         const storeId = this.$route.params.storeId || store.getters.storeId;
         return {
           imagecropperShow: false,
+          storeImgUrl:"api/store/storeImgUpload/" + storeId,
+          storeLogoUrl:"/api/store/storeLogoUpload/" + storeId,
           backFlag:false,
           storeId:storeId,
           imagecropperKey: 0,
@@ -137,7 +139,7 @@
         }
       },
       created() {
-        this.image = '/api/store/storeLogoDown/img.jpg';
+        this.image = this.$data.formStatus=='create'?'/image/companyLogo.jpeg':'/api/store/storeLogoDown/img.jpg';
         var storeId = this.$data.storeId;
         if(storeId){
           getStoreImages({storeId:storeId}).then(response => {
