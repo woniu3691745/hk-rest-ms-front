@@ -31,8 +31,9 @@
       name: 'SidebarItem',
       data() {
         const roles = store.getters.roles;
+        const storeId = store.getters.storeId;
         return {
-          logoUrl: roles.indexOf("user")>-1?'/api/store/storeLogoDown/img.jpg':'/image/companyLogo.jpeg'
+          logoUrl: storeId?'/api/store/edit/storeLogoDown/' + storeId + '/img.jpg':'/image/companyLogo.jpeg'
         }
       },
       props: {

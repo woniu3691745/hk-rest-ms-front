@@ -143,14 +143,14 @@
       },
       created() {
         var storeId = this.$data.storeId;
-        this.image = this.$data.formStatus=='create'?'/image/companyLogo.jpeg':'/api/store/edit/storeLogoDown/'
-                     + storeId +'/img.jpg?l=' +　new Date().getTime();
         if(storeId){
           getStoreImages({storeId:storeId}).then(response => {
             this.defaultImg = response.data;
           });
           getAllStores({storeId:storeId}).then(response => {
             this.temp = response.data[0];
+            this.image = !this.temp.storeLogo?'/image/companyLogo.jpeg':'/api/store/edit/storeLogoDown/'
+                     + storeId +'/img.jpg?l=' +　new Date().getTime();
           })
         }
       },

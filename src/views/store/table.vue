@@ -14,7 +14,7 @@
       <el-col :span="5" v-for="(item, index) in list" :key="item" :offset="index%4 > 0 ? 1 : 0"  class="tableCard">
         <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
           <div style="padding: 14px;">
-            <span>餐桌编号：{{item.storeId}}</span><br>
+            <span>餐桌编号：{{item.tableId}}</span><br>
             <span>餐桌状态：
               <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
             </span>
@@ -277,7 +277,7 @@
       }
     }
 </script>
-<style>
+<style scoped>
 .tableCard {
   margin-top:10px;
 }
