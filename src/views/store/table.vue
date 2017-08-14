@@ -15,7 +15,9 @@
         <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
           <div style="padding: 14px;">
             <span>餐桌编号：{{item.storeId}}</span><br>
-            <span>餐桌状态：{{item.tableStatus}}</span>
+            <span>餐桌状态：
+              <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
+            </span>
           </div>
           <vue-q-art :config="{
             value: orderUrl + item.tableId,
@@ -102,7 +104,22 @@
             update: '编辑',
             create: '创建'
           },
+          statusMap: {
+            0: '空闲',
+            1: '点餐',
+            2:'占用'
+          },
           tableKey: 0
+        }
+      },
+      filters: {
+        statusFilter(status) {
+          const statusMap = {
+            0: 'success',
+            1: 'gray',
+            2: 'danger'
+          };
+          return statusMap[status]
         }
       },
       created() {
@@ -162,13 +179,11 @@
           })
         },
         create() {
-          debugger;
           this.$refs.tableForm.validate(valid => {
             if (valid) {
               this.temp.creater = store.getters.name;
               this.temp.modify = store.getters.name;
               this.temp.storeId = this.$data.storeId;
-              debugger;
               addTable(this.temp).then(response => {
                 this.temp = response.data[0];
                 this.list.unshift(this.temp);
@@ -187,13 +202,11 @@
           });
         },
         mulCreate() {
-          debugger;
           this.$refs.tableForm.validate(valid => {
             if (valid) {
               this.temp.creater = store.getters.name;
               this.temp.modify = store.getters.name;
               this.temp.storeId = this.$data.storeId;
-              debugger;
               addTable(this.temp).then(response => {
                 this.temp = response.data[0];
                 this.list.unshift(this.temp);
@@ -212,7 +225,6 @@
           });
         },
         update() {
-          debugger;
           this.$refs.tableForm.validate(valid => {
             if (valid) {
               this.temp.modify = store.getters.name;
