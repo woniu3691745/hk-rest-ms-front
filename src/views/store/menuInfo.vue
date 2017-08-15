@@ -37,7 +37,6 @@
       components: { ImageCropper, PanThumb, Dropzone },
       name: 'table_demo',
       data() {
-        debugger;
         const menuId = this.$route.params.menuId,
         storeId = this.$route.params.storeId;
         return {
@@ -68,7 +67,6 @@
         var menuId = this.$data.menuId;
         if(menuId){
           getAllMenus({menuId:menuId}).then(response => {
-            debugger;
             this.temp = response.data[0];
           })
         }
@@ -83,7 +81,6 @@
           });
         },
         create() {
-          debugger;
           this.$refs.menuForm.validate(valid => {
             if (valid) {
               var storeId = this.$data.storeId;
@@ -107,7 +104,6 @@
           this.backStorePage();
         },
         update() {
-          debugger;
           this.$refs.menuForm.validate(valid => {
             if (valid) {
               updateMenu(this.temp).then(response => {
