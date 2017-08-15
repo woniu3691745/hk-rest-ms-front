@@ -14,7 +14,7 @@
             <el-input v-model.number="temp.seatCost" name ="seatCost"></el-input>
           </el-form-item>
           <el-form-item label="服务费" prop="serviceCost">
-            <el-input v-model="temp.serviceCost" name ="serviceCost"></el-input>
+            <el-input-number v-model="temp.serviceCost" name ="serviceCost" :min="0" :max="1" :step="0.05"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -31,15 +31,15 @@
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="上午营业时间">
-            <el-time-select v-model="temp.storeBusinessAmStartHours" 
-            :picker-options="{start: '00:00',step: '00:30',end: '12:00'}"></el-time-select>
+          <el-form-item label="上午营业时间" prop="storeBusinessAmStartHours">
+            <el-time-select v-model="temp.storeBusinessAmStartHours" name = 'storeBusinessAmStartHours'
+            :picker-options="{start: '00:00',step: '00:30',end: '12:00', maxTime: temp.storeBusinessAmEndHours}"></el-time-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="到">
-            <el-time-select v-model="temp.storeBusinessAmEndHours" 
-            :picker-options="{start: '00:00',step: '00:30',end: '12:00'}"></el-time-select>
+          <el-form-item label="到" prop="storeBusinessAmEndHours">
+            <el-time-select v-model="temp.storeBusinessAmEndHours" name = 'storeBusinessAmEndHours'
+            :picker-options="{start: '00:00',step: '00:30',end: '12:00', minTime: temp.storeBusinessAmStartHours}"></el-time-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -48,13 +48,13 @@
         <el-col :span="12">
           <el-form-item label="下午营业时间">
             <el-time-select v-model="temp.storeBusinessPmStartHours" 
-            :picker-options="{start: '12:00',step: '00:30',end: '24:00'}"></el-time-select>
+            :picker-options="{start: '12:00',step: '00:30',end: '24:00', maxTime: temp.storeBusinessPmEndHours}"></el-time-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="到">
             <el-time-select v-model="temp.storeBusinessPmEndHours" 
-            :picker-options="{start: '12:00',step: '00:30',end: '24:00'}"></el-time-select>
+            :picker-options="{start: '12:00',step: '00:30',end: '24:00', minTime: temp.storeBusinessPmStartHours}"></el-time-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -112,7 +112,14 @@
       data() {
         const storeId = this.$route.params.storeId || store.getters.storeId,
               userId = store.getters.uid,
-              uploadLogoNum = userId + new Date().getTime();
+              uploadLogoNum = userId + new Date().getTime(),
+              validateCost= (rule, value, callback) => {
+                if (value !=='' && value != null && !Number.isInteger(value)) {
+                  callback(new Error('餐位费必须为数字值'));
+                }else {
+                  callback();
+                }
+              };
         return {
           imagecropperShow: false,
           storeImgUrl:"api/store/storeImgUpload",
@@ -135,7 +142,7 @@
                 { required: true, trigger: 'blur' , message: '店名不能为空'}
             ],
             seatCost: [
-                { type: 'number', message: '餐位费必须为数字值'}
+                { validator: validateCost, trigger: 'blur'}
             ]
           },
           formStatus: storeId != null ? 'update' : 'create',

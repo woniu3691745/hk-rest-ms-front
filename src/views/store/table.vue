@@ -13,9 +13,9 @@
     <el-row v-loading.body="listLoading">
       <el-col :span="5" v-for="(item, index) in list" :key="item" :offset="index%4 > 0 ? 1 : 0"  class="tableCard">
         <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
-          <div style="padding: 14px;">
-            <span>餐桌编号：{{item.tableId}}</span><br>
-            <span>餐桌状态：
+          <div style="padding-top: 10px;">
+            <span style="line-height: 30px;">餐桌编号：{{item.tableId}}</span><br>
+            <span style="line-height: 30px;">餐桌状态：
               <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
             </span>
           </div>
@@ -69,8 +69,17 @@
         VueQArt
       },
       data() {
-        const storeId = this.$route.params.storeId || store.getters.storeId;
-        var roles = store.getters.roles;
+        const storeId = this.$route.params.storeId || store.getters.storeId,
+              roles = store.getters.roles,
+              validateTableNum = (rule, value, callback) => {
+                if (value ==='' || value == null) {
+                  callback(new Error('餐桌个数不能为空'));
+                }else if (!Number.isInteger(value)) {
+                  callback(new Error('餐桌个数必须为数字值'));
+                }else {
+                  callback();
+                }
+              };
         return {
           orderUrl:'https://localhost:9527/order/',
           tableConfig: {
@@ -95,7 +104,7 @@
           },
           tableRules: {
             tableNum: [
-                { required: true, trigger: 'blur', message: '餐桌个数不能为空'}
+                { validator: validateTableNum, trigger: 'blur'}
             ]
           },
           dialogFormVisible: false,

@@ -75,8 +75,8 @@
           <el-input v-model="temp.userPassword" name = "userPassword"></el-input>
         </el-form-item>
 
-        <el-form-item label="管理门店" v-if="storeRole">
-          <el-select class="filter-item" v-model="temp.storeId" placeholder="请选择">
+        <el-form-item label="管理门店" v-if="storeRole" prop="storeId">
+          <el-select class="filter-item" v-model.number="temp.storeId" placeholder="请选择" name = "storeId">
             <el-option v-for="item in  storeOptions" :key="item" :label="item.storeName" :value="item.storeId">
             </el-option>
           </el-select>
@@ -119,6 +119,13 @@
       name: 'table_demo',
       data() {
         var roles = store.getters.roles;
+        var validateStore = (rule, value, callback) => {
+          if (value == null || value === '') {
+            callback(new Error('管理门店不能为空'));
+          } else {
+            callback();
+          }
+        };
         return {
           storeRole:roles.indexOf("boss")>-1,
           list: null,
@@ -145,6 +152,9 @@
             ],
             userPassword: [
                 { required: true, trigger: 'blur', message: '密码不能为空'}
+            ],
+            storeId: [
+                { validator: validateStore, trigger: 'blur', message: '管理门店不能为空'}
             ]
           },
           dialogFormVisible: false,

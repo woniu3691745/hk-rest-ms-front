@@ -283,13 +283,14 @@ code {
     background-color: #20b6f9;
   }
 }
-
-.el-tag {
-  background-color: #20a0ff;
-}
-.router-link-exact-active{
+.el-menu {
   .el-tag {
-    background-color: #337ab7;
+    background-color: #20a0ff;
+  }
+  .router-link-exact-active{
+    .el-tag {
+      background-color: #337ab7;
+    }
   }
 }
 
@@ -299,4 +300,8 @@ code {
 
 .el-date-editor.el-input {
     width: 100%;
+}
+
+.el-input-number {
+  width: 100%;
 }
