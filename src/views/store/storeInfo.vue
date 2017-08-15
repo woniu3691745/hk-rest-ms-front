@@ -152,6 +152,8 @@
             this.image = !this.temp.storeLogo?'/image/companyLogo.jpeg':'/api/store/edit/storeLogoDown/'
                      + storeId +'/img.jpg?l=' +　new Date().getTime();
           })
+        }else{
+          this.image = '/image/companyLogo.jpeg';
         }
       },
       methods: {
