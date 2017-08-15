@@ -305,3 +305,7 @@ code {
 .el-input-number {
   width: 100%;
 }
+
+@media print {
+ .no-print{display:none;}
+}

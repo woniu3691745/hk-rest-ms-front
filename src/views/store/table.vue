@@ -1,41 +1,40 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
+    <div class="filter-container no-print">
       <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="菜单名称" v-model="listQuery.name">
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
       <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleCreate()">添加</el-button>
       <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleMulCreate()">批量添加</el-button>
-      <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
+      <el-button class="filter-item" type="primary" icon="picture" @click="handleDownload">全部导出</el-button>
     </div>
 
-    <el-row v-loading.body="listLoading">
-      <el-col :span="5" v-for="(item, index) in list" :key="item" :offset="index%4 > 0 ? 1 : 0"  class="tableCard">
-        <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
-          <div style="padding-top: 10px;">
-            <span style="line-height: 30px;">餐桌编号：{{item.tableId}}</span><br>
-            <span style="line-height: 30px;">餐桌状态：
-              <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
-            </span>
-          </div>
-          <vue-q-art :config="{
-            value: orderUrl + item.tableId,
-            imagePath: '/image/companyLogo.jpeg',
-            filter: 'color',
-            size: 500
-          }" :downloadButton="downloadButton"></vue-q-art>
-          <div style="padding: 14px;">
-            <div class="bottom clearfix">
-              <el-button type="primary" icon="edit"></el-button>
-              <el-button type="primary" icon="picture"></el-button>
-              <el-button type="primary" icon="delete"></el-button>
+    <div id="tableList">
+      <el-row v-loading.body="listLoading">
+        <el-col :span="5" v-for="(item, index) in list" :key="item" :offset="index%4 > 0 ? 1 : 0"  class="tableCard">
+          <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
+            <div style="padding-top: 10px;">
+              <span style="line-height: 30px;">餐桌编号：{{item.tableId}}</span><br>
+              <span style="line-height: 30px;" class="no-print">餐桌状态：
+                <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
+              </span>
             </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
+            <vue-q-art :config="{
+              value: orderUrl + item.tableId,
+              imagePath: '/image/companyLogo.jpeg',
+              filter: 'color',
+              size: 500,
+              data:item.tableId
+            }" :downloadButton="downloadButton">
+              <el-button type="primary" size="small" icon="edit" class="no-print" @click='handleUpdate(item)'></el-button>
+              <el-button type="primary" size="small" icon="delete" class="no-print" @click='handleDelete(item)'></el-button>
+              <el-button type="primary" size="small" icon="check"class="no-print">结账</el-button>
+            </vue-q-art>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form  class="small-space" ref="tableForm" :rules="tableRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
         <el-form-item v-if="dialogStatus=='mulCreate'" label="餐桌个数" prop="tableNum">
@@ -82,12 +81,6 @@
               };
         return {
           orderUrl:'https://localhost:9527/order/',
-          tableConfig: {
-            value: 'https://www.baidu.com',
-            imagePath: '/image/companyLogo.jpeg',
-            filter: 'color',
-            size: 500
-          },
           downloadButton: false,
           addBtnRole:roles.indexOf("boss")>-1,
           storeId:storeId,
@@ -142,6 +135,8 @@
             this.listLoading = false;
           })
         },
+        downLoadImg(row){
+        },
         handleFilter() {
           this.getList();
         },
@@ -176,7 +171,7 @@
           this.dialogFormVisible = true;
         },
         handleDelete(row) {
-          deleteStore(row.storeId).then(() => {
+          deleteTable(row.tableId).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -237,7 +232,7 @@
           this.$refs.tableForm.validate(valid => {
             if (valid) {
               this.temp.modify = store.getters.name;
-              updateSystemMenu(this.temp).then(() => {
+              updateTable(this.temp).then(() => {
                 for (const v of this.list) {
                   if (v.id === this.temp.id) {
                     const index = this.list.indexOf(v);
@@ -266,22 +261,7 @@
           };
         },
         handleDownload() {
-          require.ensure([], () => {
-            const { export_json_to_excel } = require('vendor/Export2Excel');
-            const tHeader = ['菜单名称', '页面路径', '组件路径', '菜单权限', '父菜单', '默认路径（一级）', '图片（一级）'];
-            const filterVal = ['name', 'path', 'component', 'role', 'parent', 'redirect', 'icon'];
-            const data = this.formatJson(filterVal, this.list);
-            export_json_to_excel(tHeader, data, 'table数据');
-          })
-        },
-        formatJson(filterVal, jsonData) {
-          return jsonData.map(v => filterVal.map(j => {
-            if (j === 'timestamp') {
-              return parseTime(v[j])
-            } else {
-              return v[j]
-            }
-          }))
+          window.print();
         }
       }
     }

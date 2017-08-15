@@ -16,7 +16,7 @@ export function addTable(query) {
 }
 
 export function deleteTable(query) {
-  return service(module, 'delete', query);
+  return service(module, 'delete/'+query, query, 'delete');
 }
 
 export function updateTable(query) {

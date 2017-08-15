@@ -1,7 +1,13 @@
 <template>
     <div>
         <div ref="qart"></div>
-        <button @click="convertToImage" v-if="downloadButton">download t2o image</button>
+        <!--<button @click="convertToImage" v-if="downloadButton">download t2o image</button>-->
+        <div style="padding: 14px;text-align: right;">
+          <div class="bottom clearfix">
+            <el-button type="primary" size="small" icon="picture" class="no-print" @click="convertToImage"></el-button>
+            <slot></slot>
+          </div>
+        </div>
     </div>
 </template>
 
@@ -31,7 +37,17 @@ import QArt from 'qartjs';
     methods: {
       renderQrcode(config){
         this.qart =  new QArt(config);
-        this.qart.make(this.$refs.qart)
+        this.qart.make(this.$refs.qart);
+        const myCanvas = this.$refs.qart.children[0];
+        //获取对应的CanvasRenderingContext2D对象(画笔)
+        const ctx = myCanvas.getContext("2d");
+        ctx.save();
+        //设置字体样式
+        ctx.font = "20px Courier New";
+        //设置字体填充颜色
+        ctx.fillStyle = "#337ab7";
+        //从坐标点(50,50)开始绘制文字
+        ctx.fillText("餐桌编号：" +　config.data, 30, 80);
       },
       convertToImage(){
         const myCanvas = this.$refs.qart.children[0];
