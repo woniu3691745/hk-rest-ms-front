@@ -170,7 +170,7 @@
         },
         handleMenu(row) {
           this.$router.push({
-            path:'/store/menuInfo/' +　row.storeId
+            path:'/store/storeMenu/' +　row.storeId
           });
         },
         handleTable(row) {

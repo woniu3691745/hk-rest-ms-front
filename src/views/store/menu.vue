@@ -5,7 +5,7 @@
       </el-input>
 
       <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
-      <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="handleCreate()">添加</el-button>
+     <el-button v-if="addBtnRole" class="filter-item" style="margin-left: 10px;"  type="primary" icon="edit" @click="createMenu">添加</el-button>
       <el-button class="filter-item" type="primary" icon="document" @click="handleDownload">导出</el-button>
     </div>
 
@@ -80,7 +80,7 @@
         const storeId = this.$route.params.storeId || store.getters.storeId;
         var roles = store.getters.roles;
         return {
-          addBtnRole:roles.indexOf("boss")>-1,
+          addBtnRole:roles.indexOf("boss")>-1 || oles.indexOf("user")>-1,
           storeId:storeId,
           list: null,
           total: null,
@@ -147,10 +147,17 @@
           this.dialogStatus = 'create';
           this.dialogFormVisible = true;
         },
+        createMenu() {
+          const storeId = this.$data.storeId;
+          this.$router.push({
+            path:'/store/storeMenuInfo/'+ storeId
+          });
+        },
         handleUpdate(row) {
-          this.temp = Object.assign({}, row);
-          this.dialogStatus = 'update';
-          this.dialogFormVisible = true;
+          const storeId = this.$data.storeId;
+          this.$router.push({
+            path:'/store/storeMenuInfo/'+ storeId + '/' +　row.menuId
+          });
         },
         handleDelete(row) {
           deleteStore(row.storeId).then(() => {
