@@ -141,10 +141,10 @@
           },
           userRules: {
             userName: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '用户名不能为空'}
             ],
             userPassword: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '密码不能为空'}
             ]
           },
           dialogFormVisible: false,

@@ -95,7 +95,7 @@
           },
           tableRules: {
             tableNum: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '餐桌个数不能为空'}
             ]
           },
           dialogFormVisible: false,

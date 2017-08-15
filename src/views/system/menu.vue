@@ -154,16 +154,16 @@
           },
           menuRules: {
             name: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '菜单名称不能为空'}
             ],
             path: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '页面路径不能为空'}
             ],
             component: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '组件路径不能为空'}
             ],
             role: [
-                { required: true, trigger: 'blur'}
+                { required: true, trigger: 'blur', message: '菜单权限不能为空'}
             ]
           },
           menuTypeOptions: [

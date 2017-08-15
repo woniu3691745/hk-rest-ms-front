@@ -102,20 +102,6 @@
             redirect: undefined,
             icon: undefined
           },
-          menuRules: {
-            name: [
-                { required: true, trigger: 'blur'}
-            ],
-            path: [
-                { required: true, trigger: 'blur'}
-            ],
-            component: [
-                { required: true, trigger: 'blur'}
-            ],
-            role: [
-                { required: true, trigger: 'blur'}
-            ]
-          },
           dialogFormVisible: false,
           dialogStatus: '',
           textMap: {

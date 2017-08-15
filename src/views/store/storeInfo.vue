@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <h2>{{textMap[formStatus]}}门店</h2>
-    <el-form class="small-space" ref="storeForm" :rules="menuRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
+    <el-form class="small-space" ref="storeForm" :rules="storeRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
       <el-row>
         <el-col :span="12">
           <el-form-item label-width="150px" label="店名" prop="storeName">
@@ -11,7 +11,7 @@
             <el-input v-model="temp.storeAdmin" name ="storeAdmin"></el-input>
           </el-form-item>
           <el-form-item label="餐位费" prop="seatCost">
-            <el-input v-model="temp.seatCost" name ="seatCost"></el-input>
+            <el-input v-model.number="temp.seatCost" name ="seatCost"></el-input>
           </el-form-item>
           <el-form-item label="服务费" prop="serviceCost">
             <el-input v-model="temp.serviceCost" name ="serviceCost"></el-input>
@@ -130,9 +130,12 @@
             storeBusinessPmEndHours: undefined,
             storeImg:undefined
           },
-          menuRules: {
+          storeRules: {
             storeName: [
-                { required: true, trigger: 'blur' }
+                { required: true, trigger: 'blur' , message: '店名不能为空'}
+            ],
+            seatCost: [
+                { type: 'number', message: '餐位费必须为数字值'}
             ]
           },
           formStatus: storeId != null ? 'update' : 'create',

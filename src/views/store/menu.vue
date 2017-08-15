@@ -44,27 +44,6 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" ref="userForm" :rules="menuRules" :model="temp" label-position="left" label-width="100px" style='width: 400px; margin-left:50px;'>
-        <el-form-item label="菜名" prop="dishesName">
-          <el-input v-model="temp.dishesName" name = "dishesName"></el-input>
-        </el-form-item>
-
-        <el-form-item label="价格" prop="dishesPrice">
-          <el-input v-model="temp.dishesPrice" name = "dishesPrice"></el-input>
-        </el-form-item>
-
-        <el-form-item label="折扣" prop="dishesDiscountPrice">
-          <el-input v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="create">确 定</el-button>
-        <el-button v-else type="primary" @click="update">确 定</el-button>
-      </div>
-    </el-dialog>
-
   </div>
 </template>
 
@@ -80,7 +59,7 @@
         const storeId = this.$route.params.storeId || store.getters.storeId;
         var roles = store.getters.roles;
         return {
-          addBtnRole:roles.indexOf("boss")>-1 || oles.indexOf("user")>-1,
+          addBtnRole:roles.indexOf("boss")>-1 || roles.indexOf("user")>-1,
           storeId:storeId,
           list: null,
           total: null,
@@ -94,20 +73,6 @@
             dishesName: undefined,
             dishesPrice: undefined,
             dishesDiscountPrice: undefined
-          },
-          menuRules: {
-            dishesName: [
-                { required: true, trigger: 'blur'}
-            ],
-            dishesPrice: [
-                { required: true, trigger: 'blur'}
-            ]
-          },
-          dialogFormVisible: false,
-          dialogStatus: '',
-          textMap: {
-            update: '编辑',
-            create: '创建'
           },
           tableKey: 0
         }
@@ -135,18 +100,6 @@
           this.listQuery.page = val;
           this.getList();
         },
-        handleModifyStatus(row, status) {
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          });
-          row.status = status;
-        },
-        handleCreate() {
-          this.resetTemp();
-          this.dialogStatus = 'create';
-          this.dialogFormVisible = true;
-        },
         createMenu() {
           const storeId = this.$data.storeId;
           this.$router.push({
@@ -160,7 +113,7 @@
           });
         },
         handleDelete(row) {
-          deleteStore(row.storeId).then(() => {
+          deleteMenu(row.dishesId).then(() => {
             this.$notify({
               title: '成功',
               message: '删除成功',
@@ -170,61 +123,6 @@
             const index = this.list.indexOf(row);
             this.list.splice(index, 1);
           })
-        },
-        create() {
-          this.$refs.menuForm.validate(valid => {
-            if (valid) {
-              this.temp.creater = store.getters.name;
-              this.temp.modify = store.getters.name;
-              addSystemMenu(this.temp).then(response => {
-                this.temp = response.data[0];
-                this.list.unshift(this.temp);
-                this.dialogFormVisible = false;
-                this.$notify({
-                  title: '成功',
-                  message: '创建成功',
-                  type: 'success',
-                  duration: 2000
-                });
-              })
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
-        },
-        update() {
-          this.$refs.menuForm.validate(valid => {
-            if (valid) {
-              this.temp.modify = store.getters.name;
-              updateSystemMenu(this.temp).then(() => {
-                for (const v of this.list) {
-                  if (v.id === this.temp.id) {
-                    const index = this.list.indexOf(v);
-                    this.list.splice(index, 1, this.temp);
-                    break;
-                  }
-                }
-                this.dialogFormVisible = false;
-                this.$notify({
-                  title: '成功',
-                  message: '更新成功',
-                  type: 'success',
-                  duration: 2000
-                });
-              })
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
-          });
-        },
-        resetTemp() {
-          this.temp = {
-            dishesName: undefined,
-            dishesPrice: undefined,
-            dishesDiscountPrice: undefined
-          };
         },
         handleDownload() {
           require.ensure([], () => {

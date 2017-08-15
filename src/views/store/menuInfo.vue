@@ -7,7 +7,7 @@
         </el-form-item>
 
         <el-form-item label="价格" prop="dishesPrice">
-          <el-input v-model="temp.dishesPrice" name = "dishesPrice"></el-input>
+          <el-input v-model.number="temp.dishesPrice" name = "dishesPrice"></el-input>
         </el-form-item>
 
         <el-form-item label="折扣" prop="dishesDiscountPrice">
@@ -42,19 +42,19 @@
         storeId = this.$route.params.storeId;
         return {
           menuId:menuId,
+          storeId:storeId,
           //backFlag:false,
           temp: {
             dishesPrice: undefined,
             dishesName: undefined,
-            dishesDiscountPrice: undefined,
-            storeId:storeId
+            dishesDiscountPrice: undefined
           },
           menuRules: {
             dishesName: [
-                { required: true, trigger: 'blur' }
+                { required: true, trigger: 'blur', message: '菜名称不能为空'}
             ],
             dishesPrice: [
-                { required: true, trigger: 'blur' }
+                { type: 'number', message: '价格必须为数字值'}
             ]
           },
           formStatus: menuId != null ? 'update' : 'create',
@@ -68,6 +68,7 @@
         var menuId = this.$data.menuId;
         if(menuId){
           getAllMenus({menuId:menuId}).then(response => {
+            debugger;
             this.temp = response.data[0];
           })
         }
@@ -75,15 +76,18 @@
       methods: {
         backStorePage(){
           //this.$data.backFlag = true;
+          var storeId = this.$data.storeId;
           this.$store.dispatch('delVisitedViews', this.$store.state.app.currentView);
           this.$router.push({
-            path: '/store/store'
+            path: '/store/storeMenu/'+storeId
           });
         },
         create() {
           debugger;
           this.$refs.menuForm.validate(valid => {
             if (valid) {
+              var storeId = this.$data.storeId;
+              this.storeId = storeId;
               addMenu(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
