@@ -23,6 +23,6 @@ export function updateTable(query) {
   return service(module, 'update', query);
 }
 
-export function getQRCodeZip(query) {
-  return service(module, 'getQRCodeZip', query, "post");
+export function getQRCodeZip(query, storeId) {
+  return service(module, storeId +'/getQRCodeZip', query, "post");
 }

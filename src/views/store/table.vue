@@ -269,7 +269,8 @@
         handleDownload() {
           const tableList = this.$refs.tableList,
                 tableImages = [],
-                imageType = "data:image/octet-stream;base64,";
+                imageType = "data:image/octet-stream;base64,",
+                storeId = this.$data.storeId;
           for (let i = 0; i < tableList.length; i++) {
             const temp = {},
                 imageData = tableList[i].convertToImageData();
@@ -277,7 +278,7 @@
             temp.tableName = "餐桌号" +　tableList[i].config.data;
             tableImages.push(temp);
           }
-          getQRCodeZip(tableImages).then(response => {
+          getQRCodeZip(tableImages,storeId).then(response => {
             
           })
           // window.print();
