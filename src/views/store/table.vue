@@ -73,8 +73,10 @@
               validateTableNum = (rule, value, callback) => {
                 if (value ==='' || value == null) {
                   callback(new Error('餐桌个数不能为空'));
-                }else if (!Number.isInteger(value)) {
+                }else if (!Number.isInteger(+value)) {
                   callback(new Error('餐桌个数必须为数字值'));
+                }else if (+value < 1) {
+                  callback(new Error('餐桌个数必须大于0'));
                 }else {
                   callback();
                 }
@@ -108,8 +110,9 @@
           },
           statusMap: {
             0: '空闲',
-            1: '点餐',
-            2:'占用'
+            1:'占用',
+            2: '点餐',
+            
           },
           tableKey: 0
         }
@@ -118,8 +121,8 @@
         statusFilter(status) {
           const statusMap = {
             0: 'success',
-            1: 'gray',
-            2: 'danger'
+            1: 'danger',
+            2: 'gray'
           };
           return statusMap[status]
         }
@@ -208,20 +211,23 @@
         mulCreate() {
           this.$refs.tableForm.validate(valid => {
             if (valid) {
-              this.temp.creater = store.getters.name;
-              this.temp.modify = store.getters.name;
-              this.temp.storeId = this.$data.storeId;
-              addTable(this.temp).then(response => {
-                this.temp = response.data[0];
-                this.list.unshift(this.temp);
-                this.dialogFormVisible = false;
-                this.$notify({
-                  title: '成功',
-                  message: '创建成功',
-                  type: 'success',
-                  duration: 2000
-                });
-              })
+              var tableNum = this.temp.tableNum;
+              for(var i = 0; i < +tableNum; i++){
+                this.temp.creater = store.getters.name;
+                this.temp.modify = store.getters.name;
+                this.temp.storeId = this.$data.storeId;
+                addTable(this.temp).then(response => {
+                  this.temp = response.data[0];
+                  this.list.unshift(this.temp);
+                  this.dialogFormVisible = false;
+                  this.$notify({
+                    title: '成功',
+                    message: '创建成功',
+                    type: 'success',
+                    duration: 2000
+                  });
+                })
+              }
             } else {
               console.log('error submit!!');
               return false;
