@@ -268,10 +268,12 @@
         },
         handleDownload() {
           const tableList = this.$refs.tableList,
-                tableImages = [];
+                tableImages = [],
+                imageType = "data:image/octet-stream;base64,";
           for (let i = 0; i < tableList.length; i++) {
-            var temp = {};
-            temp.data = tableList[i].convertToImageData();
+            const temp = {},
+                imageData = tableList[i].convertToImageData();
+            temp.data = imageData.substring(imageType.length);
             temp.name = "餐桌号" +　tableList[i].config.data;
             tableImages.push(temp);
           }
