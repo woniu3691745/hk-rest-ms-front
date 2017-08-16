@@ -26,7 +26,7 @@ export function service(module, action, data, method) {
   if (acrionMap[action]) {
     url += acrionMap[action][0];
     if (action === 'query') {
-      const page = +data.page - 1;
+      const page = +data.page;
       const limit = data.limit;
       url += '/' + page + '/' + limit;
     } else if (action === 'delete') {
