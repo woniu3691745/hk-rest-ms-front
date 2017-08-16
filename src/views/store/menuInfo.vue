@@ -84,7 +84,7 @@
           this.$refs.menuForm.validate(valid => {
             if (valid) {
               var storeId = this.$data.storeId;
-              this.storeId = storeId;
+              this.temp.storeId = storeId;
               addMenu(this.temp).then(response => {
                 this.$notify({
                   title: '成功',

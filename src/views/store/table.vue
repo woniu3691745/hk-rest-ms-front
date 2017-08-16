@@ -20,7 +20,7 @@
                 <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
               </span>
             </div>
-            <vue-q-art :config="{
+            <vue-q-art ref="tableList" :config="{
               value: orderUrl + item.tableId,
               imagePath: '/image/companyLogo.jpeg',
               filter: 'color',
@@ -261,7 +261,11 @@
           };
         },
         handleDownload() {
-          window.print();
+          const tableList = this.$refs.tableList;
+          for(var i = 0; i < tableList.length; i++){
+            tableList[i].convertToImage();
+          }
+          //window.print();
         }
       }
     }

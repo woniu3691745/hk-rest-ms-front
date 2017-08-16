@@ -38,22 +38,28 @@ import QArt from 'qartjs';
       renderQrcode(config){
         this.qart =  new QArt(config);
         this.qart.make(this.$refs.qart);
-        const myCanvas = this.$refs.qart.children[0];
-        //获取对应的CanvasRenderingContext2D对象(画笔)
-        const ctx = myCanvas.getContext("2d");
-        ctx.save();
-        //设置字体样式
-        ctx.font = "20px Courier New";
-        //设置字体填充颜色
-        ctx.fillStyle = "#337ab7";
-        //从坐标点(50,50)开始绘制文字
-        ctx.fillText("餐桌编号：" +　config.data, 30, 80);
+      },
+
+      /**
+       * 在本地进行文件保存
+       * @param  {String} data     要保存到本地的图片数据
+       * @param  {String} filename 文件名
+       */
+      saveFile(data, filename){
+          var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+          save_link.href = data;
+          save_link.download = filename;
+        
+          var event = document.createEvent('MouseEvents');
+          event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          save_link.dispatchEvent(event);
       },
       convertToImage(){
         const myCanvas = this.$refs.qart.children[0];
         const type = 'image/png';
         let image = myCanvas.toDataURL(type).replace(type, "image/octet-stream");
-        window.location.href = image; // it will save locally
+        this.saveFile(image,"餐桌号"+this.config.data);
+        //window.location.href = image; // it will save locally
       }
     }
   }
