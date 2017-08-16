@@ -56,7 +56,7 @@
 </template>
 
 <script>
-    import { getTablesByPage, addTable, deleteTable, updateTable } from 'api/storeTable';
+    import { getTablesByPage, addTable, deleteTable, updateTable, getQRCodeZip} from 'api/storeTable';
     import VueQArt from 'components/vue-qart'
     import { parseTime } from 'utils';
 
@@ -273,10 +273,13 @@
           for (let i = 0; i < tableList.length; i++) {
             const temp = {},
                 imageData = tableList[i].convertToImageData();
-            temp.data = imageData.substring(imageType.length);
-            temp.name = "餐桌号" +　tableList[i].config.data;
+            temp.base64Img = imageData.substring(imageType.length);
+            temp.tableName = "餐桌号" +　tableList[i].config.data;
             tableImages.push(temp);
           }
+          getQRCodeZip(tableImages).then(response => {
+            
+          })
           // window.print();
         }
       }
