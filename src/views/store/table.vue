@@ -267,9 +267,13 @@
           };
         },
         handleDownload() {
-          const tableList = this.$refs.tableList;
+          const tableList = this.$refs.tableList,
+                tableImages = [];
           for (let i = 0; i < tableList.length; i++) {
-            tableList[i].convertToImage();
+            var temp = {};
+            temp.data = tableList[i].convertToImageData();
+            temp.name = "餐桌号" +　tableList[i].config.data;
+            tableImages.push(temp);
           }
           // window.print();
         }
