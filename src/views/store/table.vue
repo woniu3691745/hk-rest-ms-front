@@ -40,8 +40,8 @@
         <el-form-item v-if="dialogStatus=='mulCreate'" label="餐桌个数" prop="tableNum">
           <el-input v-model="temp.tableNum" name = "tableNum"></el-input>
         </el-form-item>
-        <el-form-item label="餐桌描述" prop="tableDiscription">
-          <el-input v-model="temp.tableDiscription" name = "tableDiscription"></el-input>
+        <el-form-item label="餐桌描述" prop="tableDescription">
+          <el-input v-model="temp.tableDescription" name = "tableDescription"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -69,37 +69,37 @@
       },
       data() {
         const storeId = this.$route.params.storeId || store.getters.storeId,
-              roles = store.getters.roles,
-              validateTableNum = (rule, value, callback) => {
-                if (value ==='' || value == null) {
-                  callback(new Error('餐桌个数不能为空'));
-                }else if (!Number.isInteger(+value)) {
-                  callback(new Error('餐桌个数必须为数字值'));
-                }else if (+value < 1) {
-                  callback(new Error('餐桌个数必须大于0'));
-                }else {
-                  callback();
-                }
-              };
+          roles = store.getters.roles,
+          validateTableNum = (rule, value, callback) => {
+            if (value === '' || value == null) {
+              callback(new Error('餐桌个数不能为空'));
+            } else if (!Number.isInteger(+value)) {
+              callback(new Error('餐桌个数必须为数字值'));
+            } else if (+value < 1) {
+              callback(new Error('餐桌个数必须大于0'));
+            } else {
+              callback();
+            }
+          };
         return {
-          orderUrl:'https://localhost:9527/order/',
+          orderUrl: 'https://localhost:9527/order/',
           downloadButton: false,
-          addBtnRole:roles.indexOf("boss")>-1,
-          storeId:storeId,
+          addBtnRole: roles.indexOf('boss') > -1,
+          storeId,
           list: null,
           listLoading: false,
           listQuery: {
             page: 1,
             limit: 20,
-            storeId: storeId
+            storeId
           },
           temp: {
-            tableDiscription: undefined,
-            tableNum:undefined
+            tableDescription: undefined,
+            tableNum: undefined
           },
           tableRules: {
             tableNum: [
-                { validator: validateTableNum, trigger: 'blur'}
+                { validator: validateTableNum, trigger: 'blur' }
             ]
           },
           dialogFormVisible: false,
@@ -110,9 +110,9 @@
           },
           statusMap: {
             0: '空闲',
-            1:'占用',
-            2: '点餐',
-            
+            1: '占用',
+            2: '点餐'
+    
           },
           tableKey: 0
         }
@@ -138,7 +138,7 @@
             this.listLoading = false;
           })
         },
-        downLoadImg(row){
+        downLoadImg(row) {
         },
         handleFilter() {
           this.getList();
@@ -211,8 +211,8 @@
         mulCreate() {
           this.$refs.tableForm.validate(valid => {
             if (valid) {
-              var tableNum = this.temp.tableNum;
-              for(var i = 0; i < +tableNum; i++){
+              const tableNum = this.temp.tableNum;
+              for (let i = 0; i < +tableNum; i++) {
                 this.temp.creater = store.getters.name;
                 this.temp.modify = store.getters.name;
                 this.temp.storeId = this.$data.storeId;
@@ -262,16 +262,16 @@
         },
         resetTemp() {
           this.temp = {
-            tableDiscription: undefined,
-            tableNum:undefined
+            tableDescription: undefined,
+            tableNum: undefined
           };
         },
         handleDownload() {
           const tableList = this.$refs.tableList;
-          for(var i = 0; i < tableList.length; i++){
+          for (let i = 0; i < tableList.length; i++) {
             tableList[i].convertToImage();
           }
-          //window.print();
+          // window.print();
         }
       }
     }
