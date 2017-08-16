@@ -22,3 +22,7 @@ export function deleteTable(query) {
 export function updateTable(query) {
   return service(module, 'update', query);
 }
+
+export function getQRCodeZip(query, storeId) {
+  return service(module, storeId +'/getQRCodeZip', query, "post");
+}

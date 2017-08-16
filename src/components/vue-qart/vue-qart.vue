@@ -54,10 +54,17 @@ import QArt from 'qartjs';
           event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
           save_link.dispatchEvent(event);
       },
-      convertToImage(){
+      convertToImageData(){
         const myCanvas = this.$refs.qart.children[0];
         const type = 'image/png';
         let image = myCanvas.toDataURL(type).replace(type, "image/octet-stream");
+        return image;
+      },
+      convertToImage(){
+        // const myCanvas = this.$refs.qart.children[0];
+        // const type = 'image/png';
+        // let image = myCanvas.toDataURL(type).replace(type, "image/octet-stream");
+        let image = this.convertToImageData();
         this.saveFile(image,"餐桌号"+this.config.data);
         //window.location.href = image; // it will save locally
       }
