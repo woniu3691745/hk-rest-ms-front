@@ -276,7 +276,6 @@
           save_link.dispatchEvent(event);
         },
         handleDownload() {
-          this.listLoading = true;
           const tableList = this.$refs.tableList,
                 tableImages = [],
                 imageType = "data:image/octet-stream;base64,",
@@ -304,9 +303,6 @@
                 type: 'success',
                 duration: 2000
               });
-              this.listLoading = false;
-            }else{
-              this.listLoading = false;
             }
           })
           // window.print();
