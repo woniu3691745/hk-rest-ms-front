@@ -56,7 +56,7 @@
 </template>
 
 <script>
-    import { getTablesByPage, addTable, deleteTable, updateTable, getQRCodeZip} from 'api/storeTable';
+    import { getTablesByPage, addTable, deleteTable, updateTable, makeQRCodeImg, downLoadQRCodeZip} from 'api/storeTable';
     import VueQArt from 'components/vue-qart'
     import { parseTime } from 'utils';
 
@@ -278,8 +278,11 @@
             temp.tableName = "餐桌号" +　tableList[i].config.data;
             tableImages.push(temp);
           }
-          getQRCodeZip(tableImages,storeId).then(response => {
-            
+          makeQRCodeImg(tableImages,storeId).then(response => {
+            if(response.status === 200){
+              downLoadQRCodeZip(storeId).then(response => {
+              })
+            }
           })
           // window.print();
         }
