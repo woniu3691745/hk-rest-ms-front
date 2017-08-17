@@ -56,7 +56,7 @@
 </template>
 
 <script>
-    import { getTablesByPage, addTable, deleteTable, updateTable, getQRCodeZip} from 'api/storeTable';
+    import { getTablesByPage, addTable, deleteTable, updateTable, makeQRCodeImg, downLoadQRCodeZip} from 'api/storeTable';
     import VueQArt from 'components/vue-qart'
     import { parseTime } from 'utils';
 
@@ -266,7 +266,17 @@
             tableNum: undefined
           };
         },
+        saveFile(data, filename){
+          var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+          save_link.href = data;
+          save_link.download = filename;
+        
+          var event = document.createEvent('MouseEvents');
+          event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+          save_link.dispatchEvent(event);
+        },
         handleDownload() {
+          this.listLoading = true;
           const tableList = this.$refs.tableList,
                 tableImages = [],
                 imageType = "data:image/octet-stream;base64,",
@@ -278,8 +288,26 @@
             temp.tableName = "餐桌号" +　tableList[i].config.data;
             tableImages.push(temp);
           }
-          getQRCodeZip(tableImages,storeId).then(response => {
-            
+          makeQRCodeImg(tableImages,storeId).then(response => {
+            if(response.status === 200){
+              var $eleForm = $("<form method='get'></form>");
+              var $eleForm = document.createElementNS('http://www.w3.org/1999/xhtml', 'form');
+              $eleForm.method = "get";
+              $eleForm.action = "api/table/" + storeId + "/downLoadQRCodeZip";
+              document.body.appendChild($eleForm);
+              //提交表单，实现下载
+              $eleForm.submit();
+              document.body.removeChild($eleForm);
+              this.$notify({
+                title: '成功',
+                message: '正在导出门店餐桌二维码，请耐性等待...',
+                type: 'success',
+                duration: 2000
+              });
+              this.listLoading = false;
+            }else{
+              this.listLoading = false;
+            }
           })
           // window.print();
         }
