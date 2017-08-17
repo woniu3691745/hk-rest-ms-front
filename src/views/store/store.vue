@@ -62,7 +62,6 @@
       </el-table-column>
 
     </el-table>
-    </el-table>
 
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
