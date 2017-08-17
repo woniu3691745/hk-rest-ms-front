@@ -11,7 +11,7 @@
         </el-form-item>
 
         <el-form-item label="折扣" prop="dishesDiscountPrice">
-          <el-input v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice"></el-input>
+          <el-input-number v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice" :min="0" :max="1" :step="0.05"></el-input-number>
         </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -120,7 +120,6 @@
               return false;
             }
           });
-          
         }
       }
     }
