@@ -11,43 +11,43 @@
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="130px" align="center" label="用户名">
+      <el-table-column width="130" align="center" label="用户名">
         <template scope="scope">
           <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" label="管理门店名">
+      <el-table-column width="130" align="center" label="管理门店名">
         <template scope="scope">
           <span>{{scope.row.userName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" label="用户角色">
+      <el-table-column width="130" align="center" label="用户角色">
         <template scope="scope">
           <span>{{scope.row.userRole}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="联系方式">
+      <el-table-column width="150" align="center" label="联系方式">
         <template scope="scope">
           <span>{{scope.row.userPhone}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="110px" align="center" label="创建人">
+      <el-table-column width="110" align="center" label="创建人">
         <template scope="scope">
           <span>{{scope.row.creater}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="创建时间">
+      <el-table-column width="180" align="center" label="创建时间">
         <template scope="scope">
           <span>{{scope.row.createDateTime | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="300px">
+      <el-table-column align="center" label="操作">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
           </el-button>

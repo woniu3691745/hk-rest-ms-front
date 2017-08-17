@@ -59,7 +59,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改
           </el-button>
