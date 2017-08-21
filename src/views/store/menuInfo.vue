@@ -50,10 +50,11 @@
           },
           menuRules: {
             dishesName: [
-                { required: true, trigger: 'blur', message: '菜名称不能为空'}
+                { required: true, trigger: 'blur', message: '菜名称不能为空' }
             ],
             dishesPrice: [
-                { type: 'number', message: '价格必须为数字值'}
+                { type: 'number', message: '价格必须为数字值' },
+                { type: 'number', message: '价格必须在0~1000之间', max: 999.99, min: 0 }
             ]
           },
           formStatus: menuId != null ? 'update' : 'create',
