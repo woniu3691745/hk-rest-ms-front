@@ -2,17 +2,60 @@
   <div class="app-container calendar-list-container">
     <h2>{{textMap[formStatus]}}菜品</h2>
     <el-form class="small-space" ref="menuForm" :rules="menuRules" :model="temp" label-position="right" label-width="150px" style='width: 800px; margin-left:50px;'>
-      <el-form-item label="菜名" prop="dishesName">
-          <el-input v-model="temp.dishesName" name = "dishesName"></el-input>
-        </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="菜名" prop="dishesName">
+            <el-input v-model="temp.dishesName" name = "dishesName"></el-input>
+          </el-form-item>
 
-        <el-form-item label="价格" prop="dishesPrice">
-          <el-input v-model.number="temp.dishesPrice" name = "dishesPrice"></el-input>
-        </el-form-item>
+          <el-form-item label="价格" prop="dishesPrice">
+            <el-input v-model.number="temp.dishesPrice" name = "dishesPrice"></el-input>
+          </el-form-item>
 
-        <el-form-item label="折扣" prop="dishesDiscountPrice">
-          <el-input-number v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice" :min="0" :max="1" :step="0.05"></el-input-number>
-        </el-form-item>
+          <el-form-item label="折扣" prop="dishesDiscountPrice">
+            <el-input-number v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice" :min="0" :max="1" :step="0.05"></el-input-number>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="菜系分类">
+            <el-select v-model="temp.dishesCategory" placeholder="请选择">
+              <el-option v-for="item in dishesCategoryOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="是否素食"></el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="饮品选项"></el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span=12>
+          <el-form-item label="库存"></el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="剩余库存"></el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="创建者"></el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="修改者"></el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-form-item label="菜品介绍"></el-form-item>
+
+      <el-form-item label="菜品图片"></el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button v-if="formStatus=='create'" type="primary" @click="create">确 定</el-button>
@@ -31,7 +74,7 @@
 
     import store from 'store';
 
-   import { getAllMenus, addMenu, updateMenu } from 'api/storeMenu';
+    import { getAllMenus, addMenu, updateMenu } from 'api/storeMenu';
 
     export default {
       components: { ImageCropper, PanThumb, Dropzone },
@@ -46,7 +89,14 @@
           temp: {
             dishesPrice: undefined,
             dishesName: undefined,
-            dishesDiscountPrice: undefined
+            dishesDiscountPrice: undefined,
+            dishesCategory: undefined,
+            dishesWaterStatus: undefined,
+            isVegetarian: undefined,
+            stock: undefined,
+            overplusStock: undefined,
+            creator: undefined,
+            modifier: undefined
           },
           menuRules: {
             dishesName: [
@@ -61,7 +111,20 @@
           textMap: {
             update: '编辑',
             create: '创建'
-          }
+          },
+          dishesCategoryOptions: [{
+            value: 0,
+            label: '热菜'
+          },{
+              value: 1,
+              label: '冷饮'
+          },{
+              value: 2,
+              label: '特色'
+          },{
+              value: 3,
+              label: '其他'
+          }]
         }
       },
       created() {

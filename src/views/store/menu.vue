@@ -109,7 +109,7 @@
         handleUpdate(row) {
           const storeId = this.$data.storeId;
           this.$router.push({
-            path:'/store/storeMenuInfo/'+ storeId + '/' +　row.menuId
+            path:'/store/storeMenuInfo/' + storeId + '/' + row.menuId
           });
         },
         handleDelete(row) {
