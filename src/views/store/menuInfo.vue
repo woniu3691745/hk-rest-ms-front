@@ -22,38 +22,55 @@
         <el-col :span="10">
           <el-form-item label="菜系分类">
             <el-select v-model="temp.dishesCategory" placeholder="请选择">
-              <el-option v-for="item in dishesCategoryOptions" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
+              <el-option v-for="item in dishesCategoryOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="是否素食"></el-form-item>
+        <el-col :span="10">
+          <el-form-item label="是否素食">
+            <el-select v-model="temp.isVegetarian" placeholder="请选择">
+              <el-option v-for="item in isVegetarianOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="饮品选项"></el-form-item>
+        <el-col :span="10" v-if="temp.dishesCategory === 1">
+          <el-form-item label="饮品选项">
+            <el-select v-model="temp.dishesWaterStatus" placeholder="请选择">
+              <el-option v-for="item in waterStatusOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span=12>
-          <el-form-item label="库存"></el-form-item>
+          <el-form-item label="库存">
+            <el-input v-model="temp.stock" name = "stock"></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="剩余库存"></el-form-item>
+          <el-form-item label="剩余库存">
+            <el-input v-model="temp.overplusStock" name="overplusStock"></el-input>
+          </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="创建者"></el-form-item>
+          <el-form-item label="创建者">
+            <el-input v-model="temp.creator" name="creator"></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="修改者"></el-form-item>
+          <el-form-item label="修改者">
+            <el-input v-model="temp.modifier" name="modifier"></el-input>
+          </el-form-item>
         </el-col>
       </el-row>
 
-      <el-form-item label="菜品介绍"></el-form-item>
+      <el-form-item label="菜品介绍">
+        <el-input type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.dishesDescription"></el-input>
+      </el-form-item>
 
       <el-form-item label="菜品图片"></el-form-item>
     </el-form>
@@ -96,7 +113,8 @@
             stock: undefined,
             overplusStock: undefined,
             creator: undefined,
-            modifier: undefined
+            modifier: undefined,
+            dishesDescription: undefined,
           },
           menuRules: {
             dishesName: [
@@ -124,6 +142,26 @@
           },{
               value: 3,
               label: '其他'
+          }],
+          isVegetarianOption: [{
+            value: 0,
+            label: '否'
+          },{
+            value: 1,
+            label: '是'
+          }],
+          waterStatusOption: [{
+            value: 0,
+            label: '不加冰'
+          },{
+            value: 1,
+            label: '加冰'
+          },{
+            value: 2,
+            label: '加糖'
+          },{
+            value: 3,
+            label: '不加糖'
           }]
         }
       },
