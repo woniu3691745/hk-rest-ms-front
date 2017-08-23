@@ -57,13 +57,13 @@
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="创建者">
-            <el-input v-model="temp.creator" name="creator"></el-input>
+          <el-form-item label="创建者" v-if="formStatus=='create'">
+            <el-input v-model="temp.creater" name="creator"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="修改者">
-            <el-input v-model="temp.modifier" name="modifier"></el-input>
+            <el-input v-model="temp.modify" name="modifier"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -112,8 +112,8 @@
             isVegetarian: undefined,
             stock: undefined,
             overplusStock: undefined,
-            creator: undefined,
-            modifier: undefined,
+            creater: undefined,
+            modify: undefined,
             dishesDescription: undefined,
           },
           menuRules: {
