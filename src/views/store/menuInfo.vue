@@ -97,11 +97,17 @@
       components: { ImageCropper, PanThumb, Dropzone },
       name: 'table_demo',
       data() {
-        const menuId = this.$route.params.menuId,
+        //const menuId = this.$route.params.menuId;
+        const dishesId = this.$route.params.dishesId,
         storeId = this.$route.params.storeId;
         return {
-          menuId:menuId,
+          dishesId:dishesId,
           storeId:storeId,
+          menuInfoQuery: {
+            menuId: this.storeId,
+            dishesId: this.dishesId,
+            storeId: this.storeId
+          },
           //backFlag:false,
           temp: {
             dishesPrice: undefined,
@@ -125,7 +131,7 @@
                 { type: 'number', message: '价格必须在0~1000之间', max: 999.99, min: 0 }
             ]
           },
-          formStatus: menuId != null ? 'update' : 'create',
+          formStatus: dishesId != null ? 'update' : 'create',
           textMap: {
             update: '编辑',
             create: '创建'
@@ -166,9 +172,9 @@
         }
       },
       created() {
-        var menuId = this.$data.menuId;
-        if(menuId){
-          getAllMenus({menuId:menuId}).then(response => {
+        var dishesId = this.$data.dishesId;
+        if(dishesId){
+          getAllMenus(this.$data.menuInfoQuery).then(response => {
             this.temp = response.data[0];
           })
         }

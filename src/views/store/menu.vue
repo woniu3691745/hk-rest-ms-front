@@ -11,32 +11,31 @@
 
     <el-table :key='tableKey' :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column width="526px" align="center" label="菜名">
+      <el-table-column width="263px" align="center" label="菜名">
         <template scope="scope">
           <span>{{scope.row.dishesName}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="261px" align="center" label="价格">
+      <el-table-column width="130px" align="center" label="价格">
         <template scope="scope">
           <span>{{scope.row.dishesPrice}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="160px" align="center" label="折扣">
+      <el-table-column width="80px" align="center" label="折扣">
         <template scope="scope">
           <span>{{scope.row.dishesDiscountPrice}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="540px" align="center" label="操作">
+      <el-table-column width="270px" align="center" label="操作">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button  size="small" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
         </template>
       </el-table-column>
-
     </el-table>
     <div v-show="!listLoading" class="pagination-container">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
@@ -109,7 +108,7 @@
         handleUpdate(row) {
           const storeId = this.$data.storeId;
           this.$router.push({
-            path:'/store/storeMenuInfo/' + storeId + '/' + row.menuId
+            path:'/store/storeMenuInfo/' + storeId + '/' + row.dishesId
           });
         },
         handleDelete(row) {
