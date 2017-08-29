@@ -29,6 +29,42 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="80px" align="center" label="菜品分类">
+        <template scope="scope">
+          <span>{{toCategoryText(scope.row.dishesCategory)}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="80px" align="center" label="是否素食">
+        <template scope="scope">
+          <span>{{toIsVegetarianText(scope.row.isVegetarian)}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="80px" align="center" label="库存">
+        <template scope="scope">
+          <span>{{scope.row.stock}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="80px" align="center" label="剩余库存">
+        <template scope="scope">
+          <span>{{scope.row.overplusStock}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="130px" align="center" label="创建者">
+        <template scope="scope">
+          <span>{{scope.row.creater}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="130px" align="center" label="修改者">
+        <template scope="scope">
+          <span>{{scope.row.modify}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="270px" align="center" label="操作">
         <template scope="scope">
           <el-button  size="small" type="success" @click="handleUpdate(scope.row)">修改</el-button>
@@ -57,6 +93,8 @@
       data() {
         const storeId = this.$route.params.storeId || store.getters.storeId;
         var roles = store.getters.roles;
+        const category = ['热菜', '冷饮', '特色', '其他'];
+        const isVegetarianText = ['否', '是'];
         return {
           addBtnRole:roles.indexOf("boss")>-1 || roles.indexOf("user")>-1,
           storeId:storeId,
@@ -73,7 +111,9 @@
             dishesPrice: undefined,
             dishesDiscountPrice: undefined
           },
-          tableKey: 0
+          tableKey: 0,
+          category: category,
+          isVegetarianText: isVegetarianText
         }
       },
       created() {
@@ -140,6 +180,12 @@
               return v[j]
             }
           }))
+        },
+        toCategoryText(val) {
+          return this.category[val];
+        },
+        toIsVegetarianText(val) {
+          return this.isVegetarianText[val];
         }
       }
     }
