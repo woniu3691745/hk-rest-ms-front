@@ -100,13 +100,15 @@
         //const menuId = this.$route.params.menuId;
         const dishesId = this.$route.params.dishesId,
         storeId = this.$route.params.storeId;
+        const dishesCategory = this.$route.params.dishesCategory;
         return {
-          dishesId:dishesId,
-          storeId:storeId,
+          dishesId: dishesId,
+          storeId: storeId,
           menuInfoQuery: {
-            menuId: this.storeId,
-            dishesId: this.dishesId,
-            storeId: this.storeId
+            menuId: storeId,
+            dishesId: dishesId,
+            storeId: storeId,
+            dishesCategory: dishesCategory
           },
           //backFlag:false,
           temp: {
