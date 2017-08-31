@@ -44,32 +44,32 @@
 
       <el-row>
         <el-col :span=12>
-          <el-form-item label="库存">
-            <el-input v-model="temp.stock" name = "stock"></el-input>
+          <el-form-item label="库存" prop="stock">
+            <el-input v-model.number="temp.stock" name = "stock"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="剩余库存">
-            <el-input v-model="temp.overplusStock" name="overplusStock"></el-input>
+          <el-form-item label="剩余库存" prop="overplusStock">
+            <el-input v-model.number="temp.overplusStock" name="overplusStock"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="12">
-          <el-form-item label="创建者" v-if="formStatus=='create'">
-            <el-input v-model="temp.creater" name="creator"></el-input>
+          <el-form-item label="创建者" v-if="formStatus=='create'" prop="create">
+            <el-input v-model="temp.creater" name="creator" placeholder="输入字符不要超过16位"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="修改者">
-            <el-input v-model="temp.modify" name="modifier"></el-input>
+          <el-form-item label="修改者" prop="modify">
+            <el-input v-model="temp.modify" name="modifier" placeholder="输入字符不要超过16位"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-form-item label="菜品介绍">
-        <el-input type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="temp.dishesDescription"></el-input>
+        <el-input v-model="temp.dishesDescription" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入内容"></el-input>
       </el-form-item>
 
       <el-form-item label="菜品图片"></el-form-item>
@@ -99,8 +99,9 @@
       data() {
         //const menuId = this.$route.params.menuId;
         const dishesId = this.$route.params.dishesId,
-        storeId = this.$route.params.storeId;
-        const dishesCategory = this.$route.params.dishesCategory;
+              storeId = this.$route.params.storeId,
+              dishesCategory = this.$route.params.dishesCategory;
+
         return {
           dishesId: dishesId,
           storeId: storeId,
@@ -129,8 +130,22 @@
                 { required: true, trigger: 'blur', message: '菜名称不能为空' }
             ],
             dishesPrice: [
-                { type: 'number', message: '价格必须为数字值' },
+                { type: 'number', message: '价格必须为数字值', required: true },
                 { type: 'number', message: '价格必须在0~1000之间', max: 999.99, min: 0 }
+            ],
+            stock: [
+              { type: 'number', message: '库存必须为数字' },
+              { type: 'number', message: '库存输入不合理，请重新输入', min: 0, max: 2147483647 }
+            ],
+            overplusStock: [
+              { type: 'number', message: '剩余库存必须为数字' },
+              { type: 'number', message: '剩余库存输入不合理，请重新输入', min: 0, max: 2147483647 }
+            ],
+            modify: [
+              { type: 'string', message: '字符串过长，请重新输入', max: 16 }
+            ],
+            create: [
+              { type: 'string', message: '字符串过长，请重新输入', max: 16 }
             ]
           },
           formStatus: dishesId != null ? 'update' : 'create',
