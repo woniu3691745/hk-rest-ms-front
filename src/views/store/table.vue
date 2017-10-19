@@ -14,7 +14,7 @@
       <el-row v-loading.body="listLoading">
         <el-col :span="5" v-for="(item, index) in list" :key="item" :offset="index%4 > 0 ? 1 : 0"  class="tableCard">
           <el-card :body-style="{ padding: '0px',textAlign: 'center'}">
-            <div style="padding-top: 10px;">
+            <div style="padding-top: 10px;" @click='orderMenu(item)'>
               <span style="line-height: 30px;">餐桌编号：{{item.tableId}}</span><br>
               <span style="line-height: 30px;" class="no-print">餐桌状态：
                 <el-tag :type="item.tableStatus | statusFilter">{{statusMap[item.tableStatus]}}</el-tag>
@@ -131,14 +131,15 @@
         this.getList();
       },
       methods: {
+        orderMenu(row){
+          window.open("http://localhost:9528/#/goods/"+ this.$data.storeId + "/" +　row.tableId);
+        },
         getList() {
           this.listLoading = true;
           getTablesByPage(this.listQuery).then(response => {
             this.list = response.data[0];
             this.listLoading = false;
           })
-        },
-        downLoadImg(row) {
         },
         handleFilter() {
           this.getList();

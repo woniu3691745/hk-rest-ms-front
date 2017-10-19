@@ -15,55 +15,43 @@
           <el-form-item label="折扣" prop="dishesDiscountPrice">
             <el-input-number v-model="temp.dishesDiscountPrice" name = "dishesDiscountPrice" :min="0" :max="1" :step="0.05"></el-input-number>
           </el-form-item>
-        </el-col>
-      </el-row>
 
-      <el-row>
-        <el-col :span="10">
-          <el-form-item label="菜系分类">
-            <el-select v-model="temp.dishesCategory" placeholder="请选择">
-              <el-option v-for="item in dishesCategoryOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
+          <el-form-item label="库存" prop="stock">
+            <el-input v-model.number="temp.stock" name = "stock"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
-          <el-form-item label="是否素食">
-            <el-select v-model="temp.isVegetarian" placeholder="请选择">
-              <el-option v-for="item in isVegetarianOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10" v-if="temp.dishesCategory === 1">
-          <el-form-item label="饮品选项">
-            <el-select v-model="temp.dishesWaterStatus" placeholder="请选择">
-              <el-option v-for="item in waterStatusOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
-            </el-select>
+        <el-col :span="12">
+          <el-form-item>
+            <PanThumb :image='image'></PanThumb><br>
+            <el-button type="primary" icon="upload" style="position: absolute;margin-left: 10px;" @click="imagecropperShow=true">图片菜单
+            </el-button>
+
+            <ImageCropper :width="300" :height="300" :url="dishesImgUrl" @close='close' @crop-upload-success="cropSuccess"
+              :key="imagecropperKey" v-show="imagecropperShow" />
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span=12>
-          <el-form-item label="库存" prop="stock">
-            <el-input v-model.number="temp.stock" name = "stock"></el-input>
+          <el-form-item label="菜系分类">
+            <el-select v-model="temp.dishesCategory" placeholder="请选择">
+              <el-option v-for="item in dishesCategoryOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="剩余库存" prop="overplusStock">
-            <el-input v-model.number="temp.overplusStock" name="overplusStock"></el-input>
+        <el-col :span="12" v-if="temp.dishesCategory === 1">
+          <el-form-item label="饮品选项">
+            <el-select v-model="temp.dishesWaterStatus" placeholder="请选择">
+              <el-option v-for="item in waterStatusOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="创建者" v-if="formStatus=='create'" prop="create">
-            <el-input v-model="temp.creater" name="creator" placeholder="输入字符不要超过16位"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="修改者" prop="modify">
-            <el-input v-model="temp.modify" name="modifier" placeholder="输入字符不要超过16位"></el-input>
+        <el-col :span="12" v-else>
+          <el-form-item label="是否素食">
+            <el-select v-model="temp.isVegetarian" placeholder="请选择">
+              <el-option v-for="item in isVegetarianOption" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -71,8 +59,6 @@
       <el-form-item label="菜品介绍">
         <el-input v-model="temp.dishesDescription" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入内容"></el-input>
       </el-form-item>
-
-      <el-form-item label="菜品图片"></el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button v-if="formStatus=='create'" type="primary" @click="create">确 定</el-button>
@@ -100,9 +86,16 @@
         //const menuId = this.$route.params.menuId;
         const dishesId = this.$route.params.dishesId,
               storeId = this.$route.params.storeId,
+              userId = store.getters.uid,
+              uploadLogoNum = userId + new Date().getTime(),
               dishesCategory = this.$route.params.dishesCategory;
 
         return {
+          image:'',
+          imagecropperKey: 0,
+          uploadLogoNum:uploadLogoNum,
+          imagecropperShow: false,
+          dishesImgUrl:"/api/store/storeLogoUpload/" + uploadLogoNum,
           dishesId: dishesId,
           storeId: storeId,
           menuInfoQuery: {
@@ -193,10 +186,26 @@
         if(dishesId){
           getAllMenus(this.$data.menuInfoQuery).then(response => {
             this.temp = response.data[0];
+            this.image = !this.temp.dishesImg?'/image/companyLogo.jpeg':'/api/menu/edit/dishesImgDown/'
+                     + storeId +'/img.jpg?l=' +　new Date().getTime();
           })
+        }else{
+          this.image = '/image/companyLogo.jpeg';
         }
       },
       methods: {
+        logoFinish(){
+          this.imagecropperShow = false;
+          this.imagecropperKey = this.imagecropperKey + 1;
+          this.image = '/api/menu/add/dishesImgDown/' + this.$data.uploadLogoNum +'/img.jpg?l=' +　new Date().getTime();
+          this.temp.dishesImg = this.$data.uploadLogoNum + "/img.jpg";
+        },
+        cropSuccess() {
+          this.logoFinish();
+        },
+        close() {
+          this.imagecropperShow = false;
+        },
         backStorePage(){
           //this.$data.backFlag = true;
           var storeId = this.$data.storeId;
@@ -210,6 +219,8 @@
             if (valid) {
               var storeId = this.$data.storeId;
               this.temp.storeId = storeId;
+              this.temp.creater = store.getters.name;
+              this.temp.modify = store.getters.name;
               addMenu(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
@@ -231,6 +242,7 @@
         update() {
           this.$refs.menuForm.validate(valid => {
             if (valid) {
+              this.temp.modify = store.getters.name;
               updateMenu(this.temp).then(response => {
                 this.$notify({
                   title: '成功',
