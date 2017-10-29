@@ -187,7 +187,7 @@
           getAllMenus(this.$data.menuInfoQuery).then(response => {
             this.temp = response.data[0];
             this.image = !this.temp.dishesImg?'/image/companyLogo.jpeg':'/api/menu/edit/dishesImgDown/'
-                     + storeId +'/img.jpg?l=' +　new Date().getTime();
+                     + dishesId +'/img.jpg?l=' +　new Date().getTime();
           })
         }else{
           this.image = '/image/companyLogo.jpeg';
