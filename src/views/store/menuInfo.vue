@@ -95,7 +95,7 @@
           imagecropperKey: 0,
           uploadLogoNum:uploadLogoNum,
           imagecropperShow: false,
-          dishesImgUrl:"/api/store/storeLogoUpload/" + uploadLogoNum,
+          dishesImgUrl:"/api/menu/dishesImgUpload/" + uploadLogoNum,
           dishesId: dishesId,
           storeId: storeId,
           menuInfoQuery: {
